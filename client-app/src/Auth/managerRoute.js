@@ -23,7 +23,7 @@ const AdminRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) =>
-                role === "admin" ? (
+                role === "manager" ? (
                     <Component {...props} />
                 ) : (
                     <Redirect to={{ pathname: "/", state: { from: props.location } }} />
