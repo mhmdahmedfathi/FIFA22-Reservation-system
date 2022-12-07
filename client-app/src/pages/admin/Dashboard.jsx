@@ -8,7 +8,7 @@ function Dashboard() {
     const [clients, setClients] = useState([]);
 
     return (
-        <>
+        <div>
             <h1 className="mt-5 pt-5 text-center fw-bold">Dashboard</h1>
             <div className="row mx-0 p-5 pt-3">
                 <div className="col-12 col-md-6">
@@ -54,7 +54,7 @@ function Dashboard() {
                     )}
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
