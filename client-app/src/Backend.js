@@ -1,1 +1,1 @@
-export const BackendApi = "http://localhost:8080";
+export const BackendApi = "http://localhost:8080/api";

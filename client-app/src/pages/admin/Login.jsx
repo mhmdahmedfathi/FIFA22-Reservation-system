@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import useInput from '../../hooks/useInput';
-import { login } from './Helpers/auth';
+import { login } from '../Helpers/auth';
 
 function Login() {
     const [success, setSuccess] = useState(false);
