@@ -16,6 +16,7 @@ const db = new Sequelize(
     console.error('Unable to connect to the database:', err);
   }); 
   
+module.exports = db;
 
 
 
