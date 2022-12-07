@@ -1,5 +1,5 @@
-import { authAction } from '../../../StateManagment/Auth/reducer';
-import AxiosConfiged from '../../../axiosConfig';
+import { authAction } from '../../StateManagment/Auth/reducer';
+import AxiosConfiged from '../../axiosConfig';
 
 const signup = async (SignupData) => {
     try {

@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { fetchUsers } from './helpers/index';
-import AxiosConfiged from '../../axiosConfig';
+import AxiosConfiged from '../axiosConfig';
 
-function Dashboard() {
+function MgmtDashboard() {
 
     const [users, setUsers] = useState([]);
     const [newManagers, setnewManagers] = useState([]);
 
     useEffect(() => {
-        fetchUsers(setUsers, setnewManagers);
+        //fetchUsers(setUsers, setnewManagers);
     }, []);
 
     const handleDelete = (id) => {
@@ -22,7 +21,7 @@ function Dashboard() {
     };
 
     const handleAccept = (manager) => {
-        const res = AxiosConfiged.get(`/users/accept-manager/${manager.id}`);
+        const res = AxiosConfiged.get(`/users/accept_manager/${manager.id}`);
         if (res.status === 200) {
             setnewManagers((prev) => prev.filter((managers) => managers.id !== manager.id));
             setUsers((prev) => [...prev, manager]);
@@ -32,7 +31,7 @@ function Dashboard() {
 
     return (
         <div>
-            <h1 className="mt-5 pt-5 text-center fw-bold">Dashboard</h1>
+            <h1 className="mt-5 pt-5 text-center fw-bold">Managers Dashboard</h1>
             <div className="row mx-0 p-5 pt-3">
                 <div className="col-12 col-md-6">
                     {users.length ? (
@@ -111,4 +110,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default MgmtDashboard;

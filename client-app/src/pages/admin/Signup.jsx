@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import useInput from '../../hooks/useInput';
-import { signup } from './Helpers/auth';
+import { signup } from '../Helpers/auth';
 
 function Signup() {
     const [success, setSuccess] = useState(false);
