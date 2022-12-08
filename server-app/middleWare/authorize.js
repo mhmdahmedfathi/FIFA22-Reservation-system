@@ -1,6 +1,6 @@
 import jwt from "express-jwt"
 
-export const authorize  =(roles = []) => {
+export const authorize = (roles = []) => {
   // roles param can be a single role string (e.g. Role.User or 'User')
 
   // or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', 'User'])
@@ -9,7 +9,6 @@ export const authorize  =(roles = []) => {
     roles = [roles];
 
   }
-
 
   return [
     // authenticate JWT token and attach user to request object (req.user)

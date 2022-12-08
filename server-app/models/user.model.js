@@ -53,3 +53,5 @@ db.sync().then(() => {
 
 // `sequelize.define` also returns the model
 console.log(User === db.models.User); // true
+
+module.exports = User;
