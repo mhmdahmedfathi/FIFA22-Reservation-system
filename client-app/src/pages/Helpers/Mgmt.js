@@ -17,7 +17,7 @@ const data = [
         "team1": "Ros",
         "team2": "Josipovitz",
         "Date": "8-6-2022",
-        "Time": "12:01 AM",
+        "Time": "12:01",
         "Referee": "rjosipovitz1",
         "Lineman1": "rjosipovitz1",
         "Limeman2": "rjosipovitz1"
@@ -113,9 +113,22 @@ export const fetchMatchs = async (setmatchs) => {
     }
 }
 
-export const editMatch = async (match) => {
+export const add_editMatch = async (match, add) => {
     try {
+        if (add) {
+            const response = await AxiosConfiged.post(`/match`, match);
+            return response.data;
+        }
         const response = await AxiosConfiged.put(`/match/${match.id}`, match);
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+}
+
+export const addStadium = async (stadium) => {
+    try {
+        const response = await AxiosConfiged.post(`/stadium`, stadium);
         return response.data;
     } catch (error) {
         return error.message;

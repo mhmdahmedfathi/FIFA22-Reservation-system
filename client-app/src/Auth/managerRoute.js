@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import { getUser } from "../StateManagment/Auth/actions";
 
-const AdminRoute = ({ component: Component, ...rest }) => {
+const ManagerRoute = ({ component: Component, ...rest }) => {
     const role = useSelector((state) => state.auth.role);
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
@@ -33,4 +33,4 @@ const AdminRoute = ({ component: Component, ...rest }) => {
     );
 };
 
-export default AdminRoute;
+export default ManagerRoute;

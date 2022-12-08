@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import useInput from '../../hooks/useInput';
-import { login } from '../Helpers/auth';
+import useInput from '../hooks/useInput';
+import { login } from './Helpers/auth';
 
 function Login() {
     const [success, setSuccess] = useState(false);
@@ -52,7 +52,7 @@ function Login() {
                 Home
             </Link>
             <form onSubmit={handleSubmit} className="p-4 bg-dark text-light rounded">
-                <h2 className="text-center mb-3">Admin Login</h2>
+                <h2 className="text-center mb-3">Login</h2>
                 {(errorName || errorPassword) && (
                     <div className="alert alert-danger p-2 mb-3" role="alert">
                         {errorName ? "Make sure you entered the username correct" :
