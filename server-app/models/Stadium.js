@@ -10,12 +10,14 @@ const Stadium = db.define('Stadium', {
     allowNull: false,
     unique: true
   },
-  // rows:{
-
-  // },
-  // seatsPerRow:{
-
-  // },
+  rows:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  seatsPerRow:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   country:{
     type: DataTypes.STRING
   },
