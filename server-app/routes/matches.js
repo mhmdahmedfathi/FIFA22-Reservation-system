@@ -6,7 +6,7 @@ const { Router } = require("express");
 
 const match = require("./models/Match");
 
-router.get("/matches", (req, res) => {
+router.get("/", (req, res) => {
   match.findAll().then((match) => {
     res.json(match);
   }).catch((err) => {
@@ -14,7 +14,7 @@ router.get("/matches", (req, res) => {
   });
 });
 
-router.get("/matches/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   match.findOne({
     where: {
       id: req.params.id
@@ -32,7 +32,7 @@ router.get("/matches/:id", (req, res) => {
 }
 );
 
-router.post("/matches/create", (req, res) => {
+router.post("/create", (req, res) => {
   match.create({
     date: req.body.date,
     isFull: req.body.isFull,
@@ -49,7 +49,7 @@ router.post("/matches/create", (req, res) => {
   });
 });
 
-router.put("/matches/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   match.findOne({
     where: {
       id: req.params.id

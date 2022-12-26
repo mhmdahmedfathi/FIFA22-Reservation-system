@@ -6,7 +6,7 @@ const { Router } = require("express");
 
 const jwt = require("jsonwebtoken");
 
-router.post("/register", (req, res) => {
+router.post("register", (req, res) => {
   // hash the password
   const hashedPassword = bcrypt.hashSync(req.body.password, 8);
     user.create({
@@ -26,7 +26,7 @@ router.post("/register", (req, res) => {
   });
 });
 
-router.post("/login", (req, res) => {
+router.post("login", (req, res) => {
   user.findOne({
     where: {
       username: req.body.username,

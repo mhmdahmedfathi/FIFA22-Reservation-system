@@ -3,7 +3,7 @@ const { Router } = require("express");
 
 const team = require("./models/Team");
 
-router.get("/teams", (req, res) => {
+router.get("/", (req, res) => {
   team.findAll().then((team) => {
     res.json(team);
   }).catch((err) => {

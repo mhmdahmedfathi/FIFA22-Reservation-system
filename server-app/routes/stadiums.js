@@ -4,7 +4,7 @@ const { Router } = require("express");
 
 const stadium = require("./models/Stadium");
 
-router.get("/stadiums", (req, res) => {
+router.get("/", (req, res) => {
   stadium.findAll().then((stadium) => {
     res.json(stadium);
   }).catch((err) => {
@@ -13,7 +13,7 @@ router.get("/stadiums", (req, res) => {
 }
 );
 
-router.get("/stadiums/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   stadium.findOne({
     where: {
       id: req.params.id
@@ -31,7 +31,7 @@ router.get("/stadiums/:id", (req, res) => {
 }
 );
 
-router.post("/stadiums", (req, res) => {
+router.post("/", (req, res) => {
   stadium.create({
     name: req.body.name,
     rows: req.body.rows,
