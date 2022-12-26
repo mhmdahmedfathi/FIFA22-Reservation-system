@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import useCurrentState from '../../hooks/useCurrentState';
 import useInput from '../../hooks/useInput';
 import { signup } from '../Helpers/auth';
+import "./admin.css"
 
 function Signup() {
     const [success, setSuccess] = useState(false);
@@ -18,7 +20,7 @@ function Signup() {
         value: password,
         error: errorPassword,
         handleChange: changePassword,
-    } = useInput((value) => value.length < 3);
+    } = useInput((value) => value.length < 8);
 
     const {
         value: firstname,
@@ -41,7 +43,8 @@ function Signup() {
         value: gender,
         error: errorGender,
         handleChange: changeGender,
-    } = useInput((value) => value !== "Male" && value !== "Female");
+        handleEvent: handleGender,
+    } = useCurrentState((value) => value !== "Male" && value !== "Female");
 
     const {
         value: nationality,
@@ -76,10 +79,19 @@ function Signup() {
         } else {
             setError(null);
         }
-    }, [errorName, errorPassword, errorfirstName, errorlastname, errorDate, errorGender, errorNationality, errorEmail]);
+    }, [errorName, errorPassword, errorfirstName, errorlastname, errorDate, errorGender, errorNationality, errorEmail, gender]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (error) {
+            return;
+        }
+        else if (gender === "") {
+            setError("Make sure you entered Gender correct \n it must be \"Male\" or \"Female\"");
+            return;
+        }
+
         setLoading(true);
         const signupData = {
             name,
@@ -117,7 +129,7 @@ function Signup() {
             >
                 Home
             </Link>
-            <form onSubmit={handleSubmit} className="p-4 bg-dark text-light rounded">
+            <form onSubmit={handleSubmit} className="p-4 bg-dark text-light rounded-4">
                 <h2 className="text-center mb-3">Admin Signup</h2>
                 {(error) && (
                     <div className="alert alert-danger p-2 mb-3" role="alert">
@@ -205,22 +217,6 @@ function Signup() {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="gender" className="form-label mb-1">
-                        Gender
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        name="gender"
-                        id="gender"
-                        placeholder="gender"
-                        value={gender}
-                        onChange={changeGender}
-                        required
-                        autoFocus
-                    />
-                </div>
-                <div className="mb-3">
                     <label htmlFor="Nationality" className="form-label mb-1">
                         Nationality
                     </label>
@@ -249,6 +245,22 @@ function Signup() {
                         required
                         autoFocus
                     />
+                </div>
+                <div className="mb-3" style={{ display: "flex", "justifyContent": "space-between", alignItems: "baseline" }} >
+                    <label htmlFor="gender" className="form-label">
+                        Gender
+                    </label>
+                    <div className="dropdown" id="gender" >
+                        <a style={{ margin: "auto" }} className="btn btn-secondary dropdown-toggle"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {gender}
+                        </a>
+
+                        <ul className="dropdown-menu">
+                            <li><a className="dropdown-item" href="" onClick={(e) => { e.preventDefault(); changeGender("Male") }} >Male</a></li>
+                            <li><a className="dropdown-item" href="#" onClick={(e) => { e.preventDefault(); changeGender("Female") }}>Female</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <button
                     type="submit"

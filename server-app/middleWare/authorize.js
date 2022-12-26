@@ -1,6 +1,6 @@
 import jwt from "express-jwt"
 
-export const authorize  =(roles = []) => {
+export const authorize = (roles = []) => {
   // roles param can be a single role string (e.g. Role.User or 'User')
 
   // or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', 'User'])
@@ -14,6 +14,9 @@ export const authorize  =(roles = []) => {
     // authenticate JWT token and attach user to request object (req.user)
     jwt({ secret: process.env.secret, algorithms: ['HS256'] }),
 
+
+
+
     // authorize based on user role
     (req, res, next) => {
       if (roles.length && !roles.includes(req.user.role)) {
@@ -22,8 +25,13 @@ export const authorize  =(roles = []) => {
         return res.status(401).json({ message: 'Unauthorized' });
 
       }
+
+
+
+
       // authentication and authorization successful
       next();
+
     }
   ];
 

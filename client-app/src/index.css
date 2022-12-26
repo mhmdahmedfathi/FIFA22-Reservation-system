@@ -6,7 +6,7 @@ b:root {
   --black-color: #141618;
   --gray-border-color: #eaeaea;
 
-  --primary-fm: 'Hind', sans-serif;
+  --primary-fm: 'Poppins', sans-serif;
   --secondary-fm: 'Poppins', sans-serif;
 }
 
@@ -44,7 +44,7 @@ b:root {
 }
 
 body {
-  font-family: var(--primary-fm) !important;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 a {
