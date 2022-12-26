@@ -1,7 +1,5 @@
 const router = require("express").Router();
-const { Router } = require("express");
-
-const team = require("./models/Team");
+const team = require("../models/Team");
 
 router.get("/", (req, res) => {
   team.findAll().then((team) => {
@@ -11,3 +9,5 @@ router.get("/", (req, res) => {
   });
 }
 );
+
+module.exports = router;

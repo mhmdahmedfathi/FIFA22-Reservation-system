@@ -1,7 +1,6 @@
 const router = require("express").Router();
-const { Router } = require("express");
 
-const referee = require("./models/Referee");
+const referee = require("../models/Referee");
 
 router.get("/", (req, res) => {
   referee.findAll().then((referee) => {
@@ -11,3 +10,5 @@ router.get("/", (req, res) => {
   });
 }
 );
+
+module.exports = router;

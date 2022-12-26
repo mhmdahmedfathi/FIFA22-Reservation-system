@@ -1,8 +1,6 @@
-const router = require("express").Router();
+const router = require('express').Router();
 
-const user = require("./models/User");
-
-const { Router } = require("express");
+const user = require("../models/User");
 
 const jwt = require("jsonwebtoken");
 
@@ -24,3 +22,4 @@ router.get("/profile/:username", (req, res) => {
 }
 );
 
+module.exports = router;

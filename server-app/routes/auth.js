@@ -1,8 +1,6 @@
-const router = require("express").Router();
+const router = require('express').Router();
 
-const user = require("./models/user");
-
-const { Router } = require("express");
+const user = require("../models/User");
 
 const jwt = require("jsonwebtoken");
 
@@ -50,3 +48,5 @@ router.post("login", (req, res) => {
     res.status(500).json({ error: err });
   });
 });
+
+module.exports = router;

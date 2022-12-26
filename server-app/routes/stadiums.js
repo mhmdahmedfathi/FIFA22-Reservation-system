@@ -1,8 +1,7 @@
 const router = require("express").Router();
 
-const { Router } = require("express");
 
-const stadium = require("./models/Stadium");
+const stadium = require("../models/Stadium");
 
 router.get("/", (req, res) => {
   stadium.findAll().then((stadium) => {
@@ -45,4 +44,6 @@ router.post("/", (req, res) => {
   });
 }
 );
+
+module.exports = router;
 

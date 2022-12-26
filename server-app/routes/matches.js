@@ -1,10 +1,8 @@
 const router = require("express").Router();
 
-const user = require("./models/user");
+const user = require("../models/User");
 
-const { Router } = require("express");
-
-const match = require("./models/Match");
+const match = require("../models/Match");
 
 router.get("/", (req, res) => {
   match.findAll().then((match) => {
@@ -75,6 +73,4 @@ router.put("/:id", (req, res) => {
   });
 });
 
-
-
-
+module.exports = router;
