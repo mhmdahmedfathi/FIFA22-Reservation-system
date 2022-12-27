@@ -12,10 +12,10 @@ router.get("/", (req, res) => {
 }
 );
 
-router.get("/:id", (req, res) => {
+router.get("/:stadiumid", (req, res) => {
   stadium.findOne({
     where: {
-      id: req.params.id
+      id: req.params.stadiumid
     }
   }).then((stadium) => {
     if (!stadium) {

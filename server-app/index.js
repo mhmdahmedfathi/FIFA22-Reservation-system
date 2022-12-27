@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // list all routes 
 // app.use(routes);
-app.use('/' , require('./routes/users'));
+app.use('/users' , require('./routes/users'));
 app.use('/stadiums' , require('./routes/stadiums'));
 app.use('/' , require('./routes/auth'));
 app.use('/teams' , require('./routes/teams'));

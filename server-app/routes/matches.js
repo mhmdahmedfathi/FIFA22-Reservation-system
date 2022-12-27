@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { body, validationResult } = require('express-validator');
 
 const user = require("../models/User");
 
@@ -12,10 +13,10 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:matchid", (req, res) => {
   match.findOne({
     where: {
-      id: req.params.id
+      id: req.params.matchid
     }
   }).then((match) => {
     if (!match) {
@@ -31,6 +32,11 @@ router.get("/:id", (req, res) => {
 );
 
 router.post("/create", (req, res) => {
+  // Finds the validation errors in this request and wraps them in an object with handy functions
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   match.create({
     date: req.body.date,
     isFull: req.body.isFull,
@@ -47,10 +53,10 @@ router.post("/create", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:matchid", (req, res) => {
   match.findOne({
     where: {
-      id: req.params.id
+      id: req.params.matchid
     }
   }).then((match) => {
     if (!match) {
