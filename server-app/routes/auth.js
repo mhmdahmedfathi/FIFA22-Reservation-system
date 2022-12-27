@@ -107,7 +107,7 @@ router.post("/login", (req, res) => {
     const token = jwt.sign({ id: user.id }, jwtSecretKey, {
       expiresIn: 86400,
     });
-    res.json({ auth: true, token: token });
+    res.json({token: token  , user: user});
   }).catch((err) => {
     res.status(500).json({ error: err });
   });
