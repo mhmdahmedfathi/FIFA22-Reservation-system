@@ -3,15 +3,17 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
 
-require("dotenv").config();
+const dotenv = require('dotenv');
 require('./db/config');
+// Set up Global configuration access
+dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // list all routes 
 // app.use(routes);
-app.use('/users' , require('./routes/users'));
+app.use('/' , require('./routes/users'));
 app.use('/stadiums' , require('./routes/stadiums'));
 app.use('/' , require('./routes/auth'));
 app.use('/teams' , require('./routes/teams'));

@@ -2,12 +2,12 @@ const router = require('express').Router();
 
 const user = require("../models/User");
 
-const jwt = require("jsonwebtoken");
 
 router.get("/profile/:username", (req, res) => {
+  console.log(req.params.username)
   user.findOne({
     where: {
-      username: req.params.username
+      username: "yousifahmed"
     }
   }).then((user) => {
     if (!user) {
