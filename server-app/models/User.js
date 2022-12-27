@@ -40,7 +40,7 @@ const User = db.define('User', {
     allowNull: true
   },
   role: {
-    type: DataTypes.ENUM('Manager', 'Fan'),
+    type: DataTypes.ENUM('Manager', 'Fan', 'Admin'),
     allowNull: false
   }
 }, {});
