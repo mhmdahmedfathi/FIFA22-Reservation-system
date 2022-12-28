@@ -13,23 +13,26 @@ const Match = db.define('Match', {
   },
   isFull:{
     type: DataTypes.BOOLEAN
+  },
+  time:{
+    type: DataTypes.TIME
   }
 });
 
-Match.belongsTo(Team, {
+Match.hasOne(Team, {
   foreignKey: "team1_id"
 }); // foreign key added to the Match table
-Match.belongsTo(Team,{
+Match.hasOne(Team,{
   foreignKey: "team2_id"
 }); // foreign key added to the Match table
-Match.belongsTo(Stadium); // foreign key added to the Match table
-Match.belongsTo(Referee,{
+Match.hasOne(Stadium); // foreign key added to the Match table
+Match.hasOne(Referee,{
   foreignKey: "ref1_id"
 }); // foreign key added to the Match table
-Match.belongsTo(Referee,{
+Match.hasOne(Referee,{
   foreignKey: "ref2_id"
 }); // foreign key added to the Match table
-Match.belongsTo(Referee,{
+Match.hasOne(Referee,{
   foreignKey: "ref3_id"
 }); // foreign key added to the Match table
 
