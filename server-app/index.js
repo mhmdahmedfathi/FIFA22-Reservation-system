@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
 const errorHandler = require('./helpers/error_handler');
+var cors = require('cors')
 
 const dotenv = require('dotenv');
 require('./db/config');
@@ -11,7 +12,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cors())
 // list all routes 
 // app.use(routes);
 app.use('/users' , require('./routes/users'));
