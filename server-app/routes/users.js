@@ -1,8 +1,9 @@
 const router = require('express').Router();
 
+const { authorize } = require('../middleWare/authorize');
 const user = require("../models/User");
 
-router.get("/", (req, res) => {
+router.get("/", authorize('Manager'), (req, res) => {
   user.findAll().then((user) => {
     res.json(user);
   }).catch((err) => {

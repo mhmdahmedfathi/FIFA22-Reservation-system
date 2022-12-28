@@ -21,6 +21,7 @@
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-jwt": "^8.2.1",
     "express-validator": "^6.14.2",
     "joi": "^17.7.0",
     "jsonwebtoken": "^9.0.0",

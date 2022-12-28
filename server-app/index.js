@@ -2,6 +2,7 @@ const express = require('express');
 // const routes = require('./routes');
 const app = express();
 const port = process.env.PORT || 8080;
+const errorHandler = require('./helpers/error_handler');
 
 const dotenv = require('dotenv');
 require('./db/config');
@@ -20,6 +21,8 @@ app.use('/teams' , require('./routes/teams'));
 app.use('/matches' , require('./routes/matches'));
 app.use('/referees' , require('./routes/referee'));
 
+// global error handler
+app.use(errorHandler);
 // server listening 
 app.listen(port, (error) => {
   if (error)
