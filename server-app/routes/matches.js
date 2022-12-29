@@ -1,10 +1,8 @@
 const router = require("express").Router();
 const { body, validationResult } = require('express-validator');
-
-const user = require("../models/User");
-
 const match = require("../models/Match");
-
+const { authorize }= require("../middleWare/authorize");
+const Roles = require("../helpers/roles.js");
 
 // the only restriction is a team can not have two matches at the same day)
 router.get("/", (req, res) => {
@@ -33,7 +31,7 @@ router.get("/:matchid", (req, res) => {
 }
 );
 
-router.post("/create", (req, res) => {
+router.post("/create",authorize([Roles.Manager]), (req, res) => {
   // Finds the validation errors in this request and wraps them in an object with handy functions
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -55,7 +53,7 @@ router.post("/create", (req, res) => {
   });
 });
 
-router.put("/:matchid", (req, res) => {
+router.put("/:matchid",authorize([Roles.Manager]), (req, res) => {
   match.findOne({
     where: {
       id: req.params.matchid

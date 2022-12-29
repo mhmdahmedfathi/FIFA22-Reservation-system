@@ -22,10 +22,11 @@ const authorize = (roles = []) => {
         try {
           const validtoken = verify(accessToken, process.env.JWT_SECRET_KEY);
           req.user = validtoken;
+          req.token = accessToken;
           if (roles.length && !roles.includes(req.user.role)) {
             console.log(req.user.role);
             // user's role is not authorized
-            return res.status(401).json({ message: 'Unauthorized' });
+            return res.status(401).json({ message: 'Unauthorized Access' });
 
           }
           // authentication and authorization successful

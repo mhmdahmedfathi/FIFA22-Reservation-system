@@ -4,6 +4,8 @@ const user = require("../models/User");
 const { body, validationResult } = require('express-validator');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
+const { authorize } = require('../middleWare/authorize');
+const Roles = require('../helpers/roles');
 const saltRounds = 10;
 
 
@@ -87,6 +89,11 @@ router.post("/register",
       res.status(400).json({ error: err });
     });
   });
+
+router.post("/logout",authorize(), (req, res) => {
+  console.log(req.token)
+  res.json({ message: "Logged out" });
+});
 
 router.post("/login", (req, res) => {
   let jwtSecretKey = process.env.JWT_SECRET_KEY;

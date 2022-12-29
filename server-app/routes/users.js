@@ -3,8 +3,10 @@ const router = require('express').Router();
 const { authorize } = require('../middleWare/authorize');
 const user = require("../models/User");
 const { verify } = require("jsonwebtoken");
+const Roles = require('../helpers/roles.js');
 
-router.get("/", authorize(['Admin', 'Manager']), (req, res) => {
+// authorized only for site admin 
+router.get("/", authorize([Roles.Admin]), (req, res) => {
   user.findAll().then((user) => {
     res.json(user);
   }).catch((err) => {
@@ -14,34 +16,26 @@ router.get("/", authorize(['Admin', 'Manager']), (req, res) => {
 
 // admin approve Manger endpoint 
 
-router.get("/me", (req, res) => {
+router.get("/me", authorize(), (req, res) => {
   // get token from header
-  const accessToken = req.header('authorization').split(' ')[1];
-  if (!accessToken) res.json({ error: "User is not logged in" });
-  else try {
-    const validtoken = verify(accessToken, process.env.JWT_SECRET_KEY);
-    req.user = validtoken;
-     user.findOne({
-      where: {
-        id: req.user.id
-      }
-    }).then((user) => {
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      res.json(user);
+  user.findOne({
+    where: {
+      id: req.user.id
     }
-    ).catch((err) => {
-      res.status(500).json({ error: err });
+  }).then((user) => {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
-    );
-  } catch (err) {
-    res.json({ error: err });
-  }    
+    res.json(user);
+  }
+  ).catch((err) => {
+    res.status(500).json({ error: err });
+  }
+  );
  
 });
 
-router.put("/profile/:username", (req, res) => {
+router.put("/profile/:username", authorize([Roles.Fan]), (req, res) => {
   user.findOne({
     where: {
       username: req.params.username
@@ -74,7 +68,7 @@ router.put("/profile/:username", (req, res) => {
   );
 });
 
-router.put("/:username", (req, res) => {
+router.put("/:username",authorize([Roles.Admin]) ,(req, res) => {
   user.findOne({
     where: {
       username: req.params.username
@@ -107,7 +101,7 @@ router.put("/:username", (req, res) => {
   );
 });
 
-router.get("/profile/:username", (req, res) => {
+router.get("/profile/:username",authorize([Roles.Fan]), (req, res) => {
   user.findOne({
     where: {
       username: req.params.username
@@ -124,7 +118,7 @@ router.get("/profile/:username", (req, res) => {
   );
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id',authorize([Roles.Admin]), (req, res) => {
   user.destroy({
     where: {
       id: req.params.id

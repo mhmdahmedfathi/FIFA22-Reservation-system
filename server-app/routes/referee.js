@@ -1,8 +1,10 @@
 const router = require("express").Router();
 
 const referee = require("../models/Referee");
+const { authorize }= require("../middleWare/authorize");
+const Roles = require("../helpers/roles.js");
 
-router.get("/", (req, res) => {
+router.get("/",authorize([Roles.Manager]), (req, res) => {
   referee.findAll().then((referee) => {
     res.json(referee);
   }).catch((err) => {

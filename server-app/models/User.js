@@ -43,7 +43,7 @@ const User = db.define('User', {
     type: DataTypes.ENUM('Manager', 'Fan', 'Admin'),
     allowNull: false
   },
-  isapproved: {
+  isApproved: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: true

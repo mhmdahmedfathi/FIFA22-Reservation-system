@@ -2,8 +2,10 @@ const router = require("express").Router();
 
 
 const stadium = require("../models/Stadium");
+const { authorize } = require('../middleWare/authorize');
+const Roles = require('../helpers/roles.js');
 
-router.get("/", (req, res) => {
+router.get("/",authorize([Roles.Manager]), (req, res) => {
   stadium.findAll().then((stadium) => {
     res.json(stadium);
   }).catch((err) => {
@@ -12,7 +14,7 @@ router.get("/", (req, res) => {
 }
 );
 
-router.get("/:stadiumid", (req, res) => {
+router.get("/:stadiumid",authorize([Roles.Manager]), (req, res) => {
   stadium.findOne({
     where: {
       id: req.params.stadiumid
@@ -30,7 +32,7 @@ router.get("/:stadiumid", (req, res) => {
 }
 );
 
-router.post("/", (req, res) => {
+router.post("/",authorize([Roles.Manager]), (req, res) => {
   stadium.create({
     name: req.body.name,
     rows: req.body.rows,
