@@ -16,6 +16,7 @@ const AdminRoute = ({ component: Component, ...rest }) => {
         if (role.length === 0) {
             fetchUser();
         }
+        console.log(role);
     }, []);
     return isLoading ? (
         <div>Loading...</div>
@@ -23,7 +24,7 @@ const AdminRoute = ({ component: Component, ...rest }) => {
         <Route
             {...rest}
             render={(props) =>
-                role === "admin" ? (
+                role === "Admin" ? (
                     <Component {...props} />
                 ) : (
                     <Redirect to={{ pathname: "/", state: { from: props.location } }} />
