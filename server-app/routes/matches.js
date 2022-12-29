@@ -5,6 +5,8 @@ const user = require("../models/User");
 
 const match = require("../models/Match");
 
+
+// the only restriction is a team can not have two matches at the same day)
 router.get("/", (req, res) => {
   match.findAll().then((match) => {
     res.json(match);

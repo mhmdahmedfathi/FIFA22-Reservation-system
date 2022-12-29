@@ -43,6 +43,7 @@ const User = db.define('User', {
     type: DataTypes.ENUM('Manager', 'Fan', 'Admin'),
     allowNull: false
   }
+  // is approved by admin for manager role
 }, {});
 
 db.sync().then(() => {

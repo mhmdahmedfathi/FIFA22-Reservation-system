@@ -2,13 +2,43 @@ const router = require('express').Router();
 
 const { authorize } = require('../middleWare/authorize');
 const user = require("../models/User");
+const { verify } = require("jsonwebtoken");
 
-router.get("/", authorize('Manager'), (req, res) => {
+router.get("/", authorize(['Admin', 'Manager']), (req, res) => {
   user.findAll().then((user) => {
     res.json(user);
   }).catch((err) => {
     res.status(500).json({ error: err });
   });
+});
+
+// admin approve Manger endpoint 
+
+router.get("/me", (req, res) => {
+  // get token from header
+  const accessToken = req.header('authorization').split(' ')[1];
+  if (!accessToken) res.json({ error: "User is not logged in" });
+  else try {
+    const validtoken = verify(accessToken, process.env.JWT_SECRET_KEY);
+    req.user = validtoken;
+     user.findOne({
+      where: {
+        id: req.user.id
+      }
+    }).then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      res.json(user);
+    }
+    ).catch((err) => {
+      res.status(500).json({ error: err });
+    }
+    );
+  } catch (err) {
+    res.json({ error: err });
+  }    
+ 
 });
 
 router.put("/profile/:username", (req, res) => {
@@ -94,10 +124,10 @@ router.get("/profile/:username", (req, res) => {
   );
 });
 
-router.delete('/:username', (req, res) => {
+router.delete('/:id', (req, res) => {
   user.destroy({
     where: {
-      username: req.params.username
+      id: req.params.id
     }
   }).then((user) => {
     if (!user) {

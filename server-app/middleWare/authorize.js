@@ -33,8 +33,6 @@ const authorize = (roles = []) => {
         } catch (err) {
           res.json({ error: err });
         }
-
-
     }
   ];
 
