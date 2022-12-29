@@ -18,8 +18,8 @@ function Dashboard() {
         fetchUsers(setUsers, setnewManagers);
     }, []);
 
-    const handleDelete = (id) => {
-        const res = AxiosConfiged.delete(`/users/${id}`);
+    const handleDelete = async (id) => {
+        const res = await AxiosConfiged.delete(`/users/${id}`);
         if (res.status === 200) {
             setUsers((prev) => prev.filter((user) => user.id !== id));
         }
@@ -81,10 +81,10 @@ function Dashboard() {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{manager.username}</td>
-                                            <td>{manager.first_name}</td>
-                                            <td>{manager.last_name}</td>
+                                            <td>{manager.firstname}</td>
+                                            <td>{manager.lastname}</td>
                                             <td>{manager.email}</td>
-                                            <td>{manager.gender}</td>
+                                            <td>{manager.gender === 0 ? "Female" : "Male"}</td>
                                             <td>
                                                 <button
                                                     className="btn btn-link text-decoration-none text-approve"
@@ -126,10 +126,10 @@ function Dashboard() {
                                         <tr key={index}>
                                             <th scope='row'>{index + 1}</th>
                                             <td>{user.username}</td>
-                                            <td>{user.first_name}</td>
-                                            <td>{user.last_name}</td>
+                                            <td>{user.firstname}</td>
+                                            <td>{user.lastname}</td>
                                             <td>{user.email}</td>
-                                            <td>{user.gender}</td>
+                                            <td>{user.gender === 0 ? "Female" : "Male"}</td>
                                             <td>{user.role}</td>
                                             <td>
                                                 <button

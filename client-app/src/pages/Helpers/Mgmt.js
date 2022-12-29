@@ -105,8 +105,8 @@ const data = [
 
 export const fetchMatchs = async (setmatchs) => {
     try {
-        const response = await AxiosConfiged.get(`/match/matchs`);
-        setmatchs(response.data.data);
+        const response = await AxiosConfiged.get(`/matches`);
+        setmatchs(response.data);
         return true;
     } catch (error) {
         return error.message;
@@ -116,10 +116,10 @@ export const fetchMatchs = async (setmatchs) => {
 export const add_editMatch = async (match, add) => {
     try {
         if (add) {
-            const response = await AxiosConfiged.post(`/match`, match);
+            const response = await AxiosConfiged.post(`/matches/create`, match);
             return response.data;
         }
-        const response = await AxiosConfiged.put(`/match/${match.id}`, match);
+        const response = await AxiosConfiged.put(`/matches/${match.id}`, match);
         return response.data;
     } catch (error) {
         return error.message;
@@ -128,9 +128,40 @@ export const add_editMatch = async (match, add) => {
 
 export const addStadium = async (stadium) => {
     try {
-        const response = await AxiosConfiged.post(`/stadium`, stadium);
+        const response = await AxiosConfiged.post(`/stadiums`, stadium);
         return response.data;
     } catch (error) {
         return error.message;
     }
 }
+
+export const fetchStadiums = async (setStadiums) => {
+    try {
+        const response = await AxiosConfiged.get(`/stadiums`);
+        setStadiums(response.data);
+        return true;
+    } catch (error) {
+        return error.message;
+    }
+}
+
+export const fetchReferees = async (setReferees) => {
+    try {
+        const response = await AxiosConfiged.get(`/referees`);
+        setReferees(response.data);
+        return true;
+    } catch (error) {
+        return error.message;
+    }
+}
+
+export const fetchTeams = async (setTeams) => {
+    try {
+        const response = await AxiosConfiged.get(`/teams`);
+        setTeams(response.data);
+        return true;
+    } catch (error) {
+        return error.message;
+    }
+}
+

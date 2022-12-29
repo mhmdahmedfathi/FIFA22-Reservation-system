@@ -23,7 +23,7 @@ function Login() {
         e.preventDefault();
         setLoading(true);
         const LoginData = {
-            name,
+            username: name,
             password,
         };
         const res = await login(LoginData);

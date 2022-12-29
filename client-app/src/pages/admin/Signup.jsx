@@ -44,7 +44,7 @@ function Signup() {
         error: errorGender,
         handleChange: changeGender,
         handleEvent: handleGender,
-    } = useCurrentState((value) => value !== "Male" && value !== "Female");
+    } = useCurrentState((value) => value !== 0 && value !== 1);
 
     const {
         value: nationality,
@@ -94,15 +94,15 @@ function Signup() {
 
         setLoading(true);
         const signupData = {
-            name,
+            username: name,
             password,
             firstname,
             lastname,
-            date,
+            birthdate: date,
             gender,
             nationality,
             email,
-            role: "admin"
+            role: "Admin"
         };
         const res = await signup(signupData);
         if (!res.error) {
@@ -253,12 +253,12 @@ function Signup() {
                     <div className="dropdown" id="gender" >
                         <a style={{ margin: "auto" }} className="btn btn-secondary dropdown-toggle"
                             href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {gender}
+                            {gender === 1 ? "Male" : "Female"}
                         </a>
 
                         <ul className="dropdown-menu">
-                            <li><a className="dropdown-item" href="" onClick={(e) => { e.preventDefault(); changeGender("Male") }} >Male</a></li>
-                            <li><a className="dropdown-item" href="#" onClick={(e) => { e.preventDefault(); changeGender("Female") }}>Female</a></li>
+                            <li><a className="dropdown-item" href="" onClick={(e) => { e.preventDefault(); changeGender(1) }} >Male</a></li>
+                            <li><a className="dropdown-item" href="#" onClick={(e) => { e.preventDefault(); changeGender(0) }}>Female</a></li>
                         </ul>
                     </div>
                 </div>

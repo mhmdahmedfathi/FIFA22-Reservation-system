@@ -1,1 +1,1 @@
-export const BackendApi = "http://localhost:8080/api";
+export const BackendApi = "https://5b08-156-223-15-206.eu.ngrok.io/";
