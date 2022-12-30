@@ -55,11 +55,6 @@ router.post("/register",
   .withMessage('Role is required')
   .isIn(['Manager', 'Fan', 'Admin'])
   .withMessage('Role must be either Manager or Fan or Admin'),
-  body('nationality')
-    .notEmpty()
-    .withMessage('nationality is required')
-    .isString()
-    .withMessage('National must be a string'),
   body('gender')
   .notEmpty()
   .withMessage('gender is required')
@@ -72,6 +67,12 @@ router.post("/register",
     }
     const hashedPassword = bcrypt.hashSync(req.body.password.toString(), saltRounds);
 
+    if (req.body.role === 'Manager') {
+      req.isAproved = false;
+    } else {
+      req.isAproved = true;
+    }
+
     // hash the password
     user.create({
       username: req.body.username,
@@ -82,7 +83,8 @@ router.post("/register",
       birthdate: req.body.birthdate,
       gender: req.body.gender,
       role: req.body.role,
-      nationality: req.body.nationality
+      nationality: req.body.nationality || null,
+      isApproved: req.isAproved
     }).then((user) => {
       res.json(user);
     }).catch((err) => {
