@@ -1,11 +1,11 @@
 const Sequelize = require("sequelize");
 
 const db = new Sequelize(
-  process.env.DATABASE,
-  process.env.USER,
-  process.env.PASSWORD,
+  'test',
+  'yousif',
+  'password',
    {
-     host: process.env.HOST,
+     host: 'localhost',
      dialect: 'mysql'
    }
  );
@@ -17,6 +17,5 @@ const db = new Sequelize(
   }); 
   
 module.exports = db;
-
 
 

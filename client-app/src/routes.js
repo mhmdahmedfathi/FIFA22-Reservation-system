@@ -9,10 +9,12 @@ function Routes() {
     return (
         <>
             <Switch>
-                <AdminRoute path="/admin/dashboard" component={Dashboard} />
+                <Route path="/admin/dashboard" component={Dashboard} />
                 <Route path="/login" component={Login} />
+                <Route path="/signup" component={Signup} />
                 <AdminRoute path="/admin/signup" component={Signup} />
-                <ManagerRoute path="/manager/dashboard" component={MgmtDashboard} />
+                <AdminRoute path="/admin/login" component={Login} />
+                <AdminRoute path="/manager/dashboard" component={MgmtDashboard} />
             </Switch>
         </>
     );
