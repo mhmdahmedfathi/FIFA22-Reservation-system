@@ -61,7 +61,7 @@ router.post("/",
     );
   });
 
-router.delete("/:id", authorize([Roles.Fan]), (req, res) => {
+router.delete("/:matchId/:seatNumber", authorize([Roles.Fan]), (req, res) => {
   // check the time of the match
 
   const threeDaysAfterToday = new Date();
@@ -70,7 +70,8 @@ router.delete("/:id", authorize([Roles.Fan]), (req, res) => {
   // check wether the user is the owner of the reservation
   reservation.findOne({
     where: {
-      id: req.params.id
+      setNumber: req.params.seatNumber,
+      MatchId: req.params.matchId
     },
     include: [{
       model: match,
