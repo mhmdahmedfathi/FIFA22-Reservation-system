@@ -23,6 +23,7 @@ export default function FanProfile() {
   const [fan, setFan] = useState([""]);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [error, seterror] = useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -43,6 +44,10 @@ export default function FanProfile() {
       fetchFan(name, setFan);
     }
   }, [name]);
+
+  console.log('whyyy', fan) //taba3 tmam
+  console.log('please', fan.username) //taba3 tmam
+  console.log('please', fan.email) //taba3 tmam
 
   const {
     value: email,
@@ -102,23 +107,27 @@ export default function FanProfile() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    let fan = {
+    console.log("?", fan.email)
+    console.log("??", name)
+    let fanObj = {
       username: name,
-      email: email,
+      email: fan.email,
+      password: Password,
       firstname: FirstName,
       lastname: LastName,
       birthdate: BirthDate,
       gender: Gender,
-      nationality: Nationality,
       role: Role,
-      password: Password,
+      nationality: Nationality,
     };
-    const res = await editFan(fan);
+    const res = await editFan(fanObj);
     if (res.status === 200) {
       setEdit(false);
       fetchFan(name, setFan);
+      
     } else {
-      // seterror("something went wrong");
+      seterror("something went wrong in updating profile");
+      console.log(error)
     }
   };
 
@@ -141,12 +150,12 @@ export default function FanProfile() {
     setEdit(false);
   };
 
-  const handleClickProfile = () => {
+  const handleClickProfile = (fan) => {
     setEdit(false);
     saveState(fan);
   };
 
-  const handleEdit = () => {
+  const handleEdit = (fan) => {
     setEdit(true);
     saveState(fan);
   };
@@ -174,18 +183,18 @@ export default function FanProfile() {
         <DialogContent>
           <Nav variant="tabs" defaultActiveKey="#profileForm">
             <Nav.Item>
-              <Nav.Link onClick={handleClickProfile} href="#profileForm">
+              <Nav.Link onClick={()=>{handleClickProfile(fan)}} href="#profileForm">
                 Profile
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link onClick={handleEdit} eventKey="link-1">
+              <Nav.Link onClick={()=>{handleEdit(fan)}} eventKey="link-1">
                 Edit Profile
               </Nav.Link>
             </Nav.Item>
           </Nav>
           <div className="ProfileForm" id="profileForm">
-            <form encType="multipart/form-data" onSubmit={handleSave}>
+            <form encType="multipart/form-data">
               <div className="row align-items-end">
                 <div className="col-12 col-md-6 form-group mb-3">
                   <label htmlFor="title">Username</label>
@@ -198,7 +207,8 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={true}
-                    value={name ? name : ""}
+                    // value={name ? name : ""}
+                    value = {fan.username}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -212,7 +222,7 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={true}
-                    value={email}
+                    value={fan.email}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -243,7 +253,7 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    value={LastName}
+                    value={edit ? LastName : fan.lastname}
                     onChange={handleLastName}
                   />
                 </div>
@@ -258,7 +268,7 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    value={BirthDate}
+                    value={edit ? BirthDate : fan.birthdate}
                     onChange={handleBirthDate}
                   />
                 </div>
@@ -273,7 +283,7 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    value={Gender}
+                    value={edit ? Gender : fan.gender}
                     onChange={handleGender}
                   />
                 </div>
@@ -288,7 +298,7 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    value={Nationality}
+                    value={edit ? Nationality : fan.nationality}
                     onChange={handleNationality}
                   />
                 </div>
@@ -303,7 +313,7 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    value={Role}
+                    value={edit ? Role : fan.role}
                     onChange={handleRole}
                   />
                 </div>
@@ -318,13 +328,13 @@ export default function FanProfile() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    value={Password}
+                    value={edit ? Password : fan.password}
                     onChange={handlePassword}
                   />
                 </div>
               </div>
               {/* {edit && <button className="btn btn-warning">Submit</button>} */}
-              <button className="btn btn-warning" disabled={!edit}>
+              <button className="btn btn-warning" onClick={handleSave} disabled={!edit}>
                 Submit
               </button>
               <button

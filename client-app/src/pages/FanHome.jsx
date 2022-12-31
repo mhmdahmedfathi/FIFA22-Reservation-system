@@ -29,7 +29,8 @@ function FanHome() {
   const [fan, setFan] = useState([]);
   // const [addReservation, setAddReservation] = useState([]);
   const [reservedSeat, setReservedSeat] = useState(0);
-  const [reservedMatchID, setReservedMatchID] = useState(2);
+  const [reservedSeats, setReservedSeats] = useState([]);
+  const [reservedMatchID, setReservedMatchID] = useState(1);
   const [rowsNum, setRowsNum] = useState(0);
   const [colsNum, setColsNum] = useState(0);
 
@@ -60,7 +61,7 @@ function FanHome() {
     if (name.length !== 0) {
       console.log("hii", name);
       fetchFan(name, setFan);
-      fetchReservedSeats(reservedMatchID, setReservedSeat);
+      fetchReservedSeats(reservedMatchID, setReservedSeats);
       fetchMatchs(setmatchs);
     }
   }, [name, reservedMatchID]);
@@ -153,13 +154,16 @@ function FanHome() {
   };
 
   const handleSaveReservation = async (e) => {
+    // console.log("saving reservation")
+    console.log("hi match", reservedMatchID)
     e.preventDefault();
     let reservation = {
-      date: new Date(),
+      date: Date.now.toString(),
       seatNumber: reservedSeat,
       userid: fan.id,
-      matchid: reservedMatchID,
+      matchId: 1,
     };
+    console.log("saving reservation")
     const res = await addReservation(reservation);
     if (res.status === 200) {
     } else {
@@ -217,7 +221,11 @@ function FanHome() {
   for (let i = 0; i < rowsNum * colsNum; i++) {
     isSubmitted.push(0);
   }
-  isSubmitted[2] = 1;
+
+  for (let i=0 ; i<reservedSeats.length; i++){
+    isSubmitted[reservedSeats[i]] = 1;
+  }
+ 
 
   return (
     <div>
@@ -479,7 +487,7 @@ function FanHome() {
                             id={index_j + colsNum * index_i + 1}
                             onClick={() => {
                               setReservedSeat(index_j + colsNum * index_i + 1);
-                              // setOpenPay(true);
+                              setOpenPay(true);
                               // disableArray.push(index_j+cols_num*index_i+1)
                               // console.log(disableArray)
                               // console.log(isSubmitted)
@@ -532,8 +540,8 @@ function FanHome() {
                             <button
                               type="submit"
                               className="btn btn-warning"
-                              onClick={() => {
-                                handleSaveReservation();
+                              onClick={(e) => {
+                                handleSaveReservation(e);
                                 setOpenPay(false);
                               }}
                             >

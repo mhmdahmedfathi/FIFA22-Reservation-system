@@ -3,7 +3,7 @@ import AxiosConfiged from "../../axiosConfig";
 export const fetchFan = async (username, setFan) => {
     try {
         console.log(username)
-        const response = await AxiosConfiged.get(`users/profile/${username}`);
+        const response = await AxiosConfiged.get(`/users/profile/${username}`);
         setFan(response.data);
         return true;
     } catch (error) {
@@ -13,8 +13,8 @@ export const fetchFan = async (username, setFan) => {
 
 export const editFan = async (fan) => {
     try {
-        const response = await AxiosConfiged.put(`/users/profile/${fan.username}`);
-        return response.data;
+        const response = await AxiosConfiged.put(`/users/profile/${fan.username}`, fan);
+        return response;
     } catch (error) {
         return error.message;
     }
