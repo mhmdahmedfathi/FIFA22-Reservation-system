@@ -162,7 +162,7 @@ function FanHome() {
     if (res.status === 200) {
       setTicketNumber(res.data.id);
     } else {
-      seterror("something went wrong");
+      seterror(res.error);
     }
   };
 
@@ -171,7 +171,7 @@ function FanHome() {
     const res = await cancelReservation(reservedMatchID, cancelledSeat);
     if (res.status === 200) {
     } else {
-      seterror("something went wrong with cancellation");
+      seterror(res.error);
       console.log(error);
     }
   };
@@ -201,16 +201,15 @@ function FanHome() {
   };
 
   let isSubmitted = [];
-  setTimeout(() => {
-    fetchReservedSeats(reservedMatchID, setReservedSeats);
-    for (let i = 0; i < rowsNum * colsNum; i++) {
-      isSubmitted.push(0);
-    }
 
-    for (let i = 0; i < reservedSeats.length; i++) {
-      isSubmitted[reservedSeats[i]] = 1;
-    }
-  }, 3000);
+  fetchReservedSeats(reservedMatchID, setReservedSeats);
+  for (let i = 0; i < rowsNum * colsNum; i++) {
+    isSubmitted.push(0);
+  }
+
+  for (let i = 0; i < reservedSeats.length; i++) {
+    isSubmitted[reservedSeats[i]] = 1;
+  }
   return (
     <div>
       <nav className="navbar sticky-top navbar-black bg-black">

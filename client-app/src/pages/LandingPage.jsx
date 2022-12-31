@@ -99,7 +99,7 @@ function LandingPage() {
               ) : (
                 <>
                   <button
-                    className="btn col-4 col-md-5 btn-primary"
+                    className="btn col-4 col-md-10 btn-primary"
                     style={{ marginBottom: "10px" }}
                     onClick={() => {
                       window.location.href = "/login";
@@ -109,12 +109,22 @@ function LandingPage() {
                   </button>
                   <br />
                   <button
-                    className="btn col-4 col-md-5 btn-primary"
+                    className="btn col-4 col-md-10 btn-primary"
                     onClick={() => {
                       window.location.href = "/signup";
                     }}
                   >
                     signup
+                  </button>
+                  <br />
+                  <br />
+                  <button
+                    className="btn col-4 col-md-10 btn-primary"
+                    onClick={() => {
+                      window.location.href = "/guest";
+                    }}
+                  >
+                    View as a guest
                   </button>
                 </>
               )}

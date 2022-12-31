@@ -285,6 +285,7 @@ function MgmtDashboard() {
     const res = await addStadium(stadium);
     if (res.status === 200) {
       setshowStadium(false);
+      await fetchStadiums(setstadiums);
     } else {
       seterror_Stadium("Stadium name already exists");
     }

@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import MgmtDashboard from "./pages/MgmtDashboard";
 import FanHome from "./pages/FanHome";
 import LandingPage from "./pages/LandingPage";
+import Guest from "./pages/Guest";
 function Routes() {
   return (
     <>
@@ -21,8 +22,9 @@ function Routes() {
         <ManagerRoute path="/manager/dashboard" component={MgmtDashboard} />
         {/* <Route path="/signup" component={Signup} /> */}
         <Route path="/fan" component={FanHome} />
+        <Route path="/Guest" component={Guest} />
         <Route path="/" component={LandingPage} />
-        <Route path="*" component={() => Redirect("/login")} />
+        <Route path="*" component={() => Redirect("/")} />
       </Switch>
     </>
   );
