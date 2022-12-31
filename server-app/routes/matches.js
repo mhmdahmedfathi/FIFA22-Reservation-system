@@ -123,9 +123,9 @@ body('isFull')
         isFull: req.body.isFull,
         team1_id: req.body.team1,
         team2_id: req.body.team2,
-        ref1_id: req.body.referee1,
-        ref2_id: req.body.referee2,
-        ref3_id: req.body.referee3,
+        ref1_id: req.body.ref1,
+        ref2_id: req.body.ref2,
+        ref3_id: req.body.ref3,
         StadiumId: req.body.stadium_id,
         time: req.body.time
       }).then((match) => {

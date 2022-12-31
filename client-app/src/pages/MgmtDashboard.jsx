@@ -417,7 +417,6 @@ function MgmtDashboard() {
                         <a
                           style={{ margin: "auto" }}
                           className="btn btn-secondary dropdown-toggle"
-                          href="#"
                           role="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
@@ -472,7 +471,6 @@ function MgmtDashboard() {
                         <a
                           style={{ margin: "auto" }}
                           className="btn btn-secondary dropdown-toggle"
-                          href="#"
                           role="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
@@ -523,7 +521,6 @@ function MgmtDashboard() {
                         <a
                           style={{ margin: "auto" }}
                           className="btn btn-secondary dropdown-toggle"
-                          href="#"
                           role="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
@@ -606,7 +603,6 @@ function MgmtDashboard() {
                         <a
                           style={{ margin: "auto" }}
                           className="btn btn-secondary dropdown-toggle"
-                          href="#"
                           role="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
@@ -657,7 +653,6 @@ function MgmtDashboard() {
                         <a
                           style={{ margin: "auto" }}
                           className="btn btn-secondary dropdown-toggle"
-                          href="#"
                           role="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
@@ -708,7 +703,6 @@ function MgmtDashboard() {
                         <a
                           style={{ margin: "auto" }}
                           className="btn btn-secondary dropdown-toggle"
-                          href="#"
                           role="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"

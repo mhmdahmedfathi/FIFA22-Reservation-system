@@ -49,7 +49,7 @@ router.post("/",
         return res.status(400).json({ error: "Set is already reserved" });
       }
       reservation.create({
-        date: Date.now().toString(),
+        date: new Date(Date.now()).toLocaleString().split(',')[0].toString(),
         setNumber: req.body.seatNumber,
         MatchId: req.body.matchId,
         UserId: req.user.id
@@ -61,7 +61,7 @@ router.post("/",
     );
   });
 
-router.delete("/:id", authorize([Roles.Fan]), (req, res) => {
+router.delete("/:matchId/:seatNumber", authorize([Roles.Fan]), (req, res) => {
   // check the time of the match
 
   const threeDaysAfterToday = new Date();
@@ -70,7 +70,8 @@ router.delete("/:id", authorize([Roles.Fan]), (req, res) => {
   // check wether the user is the owner of the reservation
   reservation.findOne({
     where: {
-      id: req.params.id
+      setNumber: req.params.seatNumber,
+      MatchId: req.params.matchId
     },
     include: [{
       model: match,
@@ -88,7 +89,7 @@ router.delete("/:id", authorize([Roles.Fan]), (req, res) => {
     }
     reservation.destroy({
       where: {
-        id: req.params.id
+        id: reservation_val.id
       }
     }).then((reservation) => {
       res.json(reservation);
