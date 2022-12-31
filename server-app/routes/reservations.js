@@ -85,7 +85,7 @@ router.delete("/:matchId/:seatNumber", authorize([Roles.Fan]), (req, res) => {
       return res.status(400).json({ error: "You are not the owner of this reservation" });
     }
     if (new Date(reservation_val.Match.date) < threeDaysAfterToday) {
-      return res.status(400).json({ error: "you can't cancel the ticket" });
+      return res.status(400).json({ error: "you can't cancel the ticket 3 days before the match" });
     }
     reservation.destroy({
       where: {
