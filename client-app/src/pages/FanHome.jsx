@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { faEye, faFutbol } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { fetchMatchs } from './Helpers/Mgmt';
-import { fetchFan, editFan, addReservation, fetchReservedSeats } from "./Helpers/fan";
+import { fetchMatchs } from "./Helpers/Mgmt";
+import {
+  fetchFan,
+  editFan,
+  addReservation,
+  fetchReservedSeats,
+} from "./Helpers/fan";
 import useCurrentState from "../hooks/useCurrentState";
 import { logout } from "./Helpers/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,8 +44,8 @@ function FanHome() {
   const [stadiums, setstadiums] = useState([]);
   const [referees, setreferees] = useState([]);
 
-  const name = useSelector((state) => state.auth.username);
-  console.log(name)
+  const name = useSelector((state) => state.auth.username) || "";
+  console.log(name);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchUser = async () => {
@@ -50,15 +55,14 @@ function FanHome() {
       fetchUser();
     }
   }, []);
-
+  console.log("matchs", matchs.length);
   useEffect(() => {
-    if (name.length != 0) {
-      console.log("hii", name)
-      fetchFan(name, setFan)
-      fetchReservedSeats(reservedMatchID, setReservedSeat)
+    if (name.length !== 0) {
+      console.log("hii", name);
+      fetchFan(name, setFan);
+      fetchReservedSeats(reservedMatchID, setReservedSeat);
       fetchMatchs(setmatchs);
     }
-    
   }, [name, reservedMatchID]);
 
   // for the matches
@@ -154,11 +158,10 @@ function FanHome() {
       date: new Date(),
       seatNumber: reservedSeat,
       userid: fan.id,
-      matchid: reservedMatchID
+      matchid: reservedMatchID,
     };
-    const res = await addReservation(reservation)
+    const res = await addReservation(reservation);
     if (res.status === 200) {
-      
     } else {
       seterror("something went wrong");
     }
@@ -186,9 +189,9 @@ function FanHome() {
 
   const handleReserve = (match) => {
     setShowGrid(true);
-    setReservedMatchID(match.id)
-    setRowsNum(match.Stadium.rows)
-    setColsNum(match.Stadium.seatsPerRow)
+    setReservedMatchID(match.id);
+    setRowsNum(match.Stadium.rows);
+    setColsNum(match.Stadium.seatsPerRow);
   };
 
   const handleReserveSeat = () => {
@@ -220,7 +223,7 @@ function FanHome() {
       <nav className="navbar sticky-top navbar-black bg-black">
         <div className="container-fluid">
           <a className="navbar-brand" style={{ color: "white" }}>
-            Home {name}
+            Home {name ? name : ""}
           </a>
           <a className="navbar-brand" style={{ color: "white" }}>
             FIFA WORLD CUP 22
@@ -232,7 +235,7 @@ function FanHome() {
       <h1 className="mt-2 pt-5 text-center fw-bold"> Matches</h1>
       <div className="row mx-0 p-5 pt-3">
         <div className="col-12 col-md-12">
-          {matchs.length ? (
+          {matchs.length !== 0 ? (
             <>
               <table className="table">
                 <thead className="table-dark">
@@ -250,9 +253,9 @@ function FanHome() {
                   {matchs.map((match, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td> {match.team1} </td>
-                      <td> {match.Time} </td>
-                      <td> {match.team2}</td>
+                      <td> {match.team1.name} </td>
+                      <td> {match.time || "8:00 PM"} </td>
+                      <td> {match.team2.name}</td>
                       <td>
                         <button
                           className="btn btn-myedit btn-link text-decoration-none text-view"
@@ -471,10 +474,10 @@ function FanHome() {
                       {Array.from(Array(colsNum)).map((_j, index_j) => (
                         <Col>
                           <button
-                            className= "btn block btn-secondary stadBtn"
+                            className="btn block btn-secondary stadBtn"
                             id={index_j + colsNum * index_i + 1}
                             onClick={() => {
-                              setReservedSeat(index_j + colsNum * index_i + 1)
+                              setReservedSeat(index_j + colsNum * index_i + 1);
                               // setOpenPay(true);
                               // disableArray.push(index_j+cols_num*index_i+1)
                               // console.log(disableArray)
@@ -529,8 +532,8 @@ function FanHome() {
                               type="submit"
                               className="btn btn-warning"
                               onClick={() => {
-                                handleSaveReservation()
-                                setOpenPay(false)
+                                handleSaveReservation();
+                                setOpenPay(false);
                               }}
                             >
                               Submit
