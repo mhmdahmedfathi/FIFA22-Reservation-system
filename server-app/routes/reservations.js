@@ -89,7 +89,7 @@ router.delete("/:matchId/:seatNumber", authorize([Roles.Fan]), (req, res) => {
     }
     reservation.destroy({
       where: {
-        id: req.params.id
+        id: reservation_val.id
       }
     }).then((reservation) => {
       res.json(reservation);
