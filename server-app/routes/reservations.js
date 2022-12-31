@@ -4,13 +4,18 @@ const Roles = require("../helpers/roles.js");
 const { authorize } = require('../middleWare/authorize');
 const match = require("../models/Match");
 
-router.get("/:id" , authorize([Roles.Manager]), (req, res) => {
+router.get("/:id" , authorize([Roles.Manager, Roles.Fan]), (req, res) => {
   reservation.findAll({
+    attributes: ['setNumber'],
     where: {
       MatchId: req.params.id
     }
   }).then((reservation) => {
-    res.json(reservation);
+    setNumbers = [];
+    reservation.forEach((element) => {
+      setNumbers.push(element.setNumber);
+    });
+    res.json({setNumbers: setNumbers});
   }).catch((err) => {
     res.status(500).json({ error: err });
   });
