@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { faEye, faFutbol } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { addStadium, add_editMatch, fetchMatchs } from "./Helpers/Mgmt";
+import { add_editMatch, fetchMatchs, fetchTeams, fetchStadiums, fetchReferees } from './Helpers/Mgmt';
+import { fetchFan, editFan, addReservation, fetchReservedSeats } from "./Helpers/fan";
 import useCurrentState from "../hooks/useCurrentState";
 import { logout } from "./Helpers/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,28 +12,51 @@ import "./fan.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-// import Dialog from "@mui/material/Dialog";
+import Dialog from "@mui/material/Dialog";
 import fanprofile from "./FanProfile";
 import CreditCard from "./CreditCard";
-import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
 function FanHome() {
+  const [fan, setFan] = useState([]);
+  // const [addReservation, setAddReservation] = useState([]);
+  const [reservedSeat, setReservedSeat] = useState(0);
+  const [reservedMatchID, setReservedMatchID] = useState(0);
+  const [rowsNum, setRowsNum] = useState(0);
+  const [colsNum, setColsNum] = useState(0);
+
   const [matchs, setmatchs] = useState([]);
   const [showenMatch, setshowenMatch] = useState(false);
   const [isEditable, setisEditable] = useState(false);
   const [holdID, setholdID] = useState(0);
   const [error, seterror] = useState("");
-  const [error_Stadium, seterror_Stadium] = useState("");
   const [add, setadd] = useState(false);
-  const [showStadium, setshowStadium] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
+  const [Teams, setTeams] = useState(false);
+  const [stadiums, setstadiums] = useState([]);
+  const [referees, setreferees] = useState([]);
+
+  const name = useSelector((state) => state.auth.username);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchUser = async () => {
+      dispatch(getUser());
+    };
+    if (name.length === 0) {
+      fetchUser();
+    }
+  }, []);
 
   useEffect(() => {
+    fetchFan(name, setFan)
+    fetchReservedSeats(reservedMatchID, setReservedSeat)
     fetchMatchs(setmatchs);
+    fetchTeams(setTeams)
+    fetchStadiums(setstadiums)
+    fetchReferees(setreferees)
   }, []);
 
   // for the matches
@@ -122,6 +146,22 @@ function FanHome() {
     }
   };
 
+  const handleSaveReservation = async (e) => {
+    e.preventDefault();
+    let reservation = {
+      date: new Date(),
+      seatNumber: reservedSeat,
+      userid: fan.id,
+      matchid: reservedMatchID
+    };
+    const res = await addReservation(reservation)
+    if (res.status === 200) {
+      
+    } else {
+      seterror("something went wrong");
+    }
+  };
+
   const saveState = (match) => {
     setholdID(match.id);
     changeTeam1(match.team1);
@@ -142,8 +182,11 @@ function FanHome() {
 
   const [seatDisable, setSeatDisable] = React.useState(false);
 
-  const handleReserve = () => {
+  const handleReserve = (match) => {
     setShowGrid(true);
+    setReservedMatchID(match.id)
+    setRowsNum(match.Stadium.rows)
+    setColsNum(match.Stadium.seatsPerRow)
   };
 
   const handleReserveSeat = () => {
@@ -158,67 +201,17 @@ function FanHome() {
 
   const handleOpenPay = () => {
     setOpenPay(true);
-    disableArray.push(value);
   };
 
   const handleClosePay = () => {
     setOpenPay(false);
-    // disableArray.pop()
   };
 
-  let rows_num = 3;
-  let cols_num = 12;
-  let count = 0;
-  let value = 0;
-  let cName = "able";
-
-  let btnToDisable = 0;
-
   let isSubmitted = [];
-  for (let i = 0; i < rows_num * cols_num; i++) {
+  for (let i = 0; i < rowsNum * colsNum; i++) {
     isSubmitted.push(0);
   }
   isSubmitted[2] = 1;
-
-  function changeBtnColor() {
-    document.getElementById("hi").style.backgroundColor = "#41403e";
-  }
-
-  useEffect(() => {
-    if (errorTeam1) {
-      seterror("Team 1 name is too short");
-    } else if (errorTeam2) {
-      seterror("Team 2 name is too short");
-    } else if (errorMatchVenue) {
-      seterror("Match Venue name is too short");
-    } else if (errorMainReferee) {
-      seterror("Main Referee name is too short");
-    } else if (errorLineMan1) {
-      seterror("Lineman 1 name is too short");
-    } else if (errorLineMan2) {
-      seterror("Lineman 2 name is too short");
-    } else {
-      seterror("");
-    }
-  }, [
-    errorTeam1,
-    errorTeam2,
-    errorMatchVenue,
-    errorMainReferee,
-    errorLineMan1,
-    errorLineMan2,
-  ]);
-
-  const name = useSelector((state) => state.auth.username);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const fetchUser = async () => {
-      dispatch(getUser());
-    };
-    if (name.length === 0) {
-      fetchUser();
-    }
-  }, []);
 
   return (
     <div>
@@ -272,7 +265,7 @@ function FanHome() {
                           <button
                             className="btn btn-myedit btn-link text-decoration-none text-success"
                             onClick={() => {
-                              handleReserve();
+                              handleReserve(match);
                             }}
                           >
                             reserve{" "}
@@ -285,7 +278,7 @@ function FanHome() {
                           <button
                             className="btn btn-myedit btn-link text-decoration-none text-danger"
                             onClick={() => {
-                              handleReserve();
+                              handleReserve(match);
                             }}
                           >
                             cancel{" "}
@@ -470,28 +463,15 @@ function FanHome() {
 
               <div id="TicketReserve">
                 <Container>
-                  <button
-                    className="btn btn-warning resBtn"
-                    onClick={() => {
-                      setOpenPay(true);
-                    }}
-                  >
-                    Reserve
-                  </button>
-                  {Array.from(Array(rows_num)).map((_i, index_i) => (
+                  {Array.from(Array(rowsNum)).map((_i, index_i) => (
                     <Row className="stadRow">
-                      {Array.from(Array(cols_num)).map((_j, index_j) => (
+                      {Array.from(Array(colsNum)).map((_j, index_j) => (
                         <Col>
                           <button
-                            className={`btn block btn-secondary stadBtn ${
-                              isSubmitted[index_j + cols_num * index_i + 1]
-                                ? "disable"
-                                : ""
-                            }`}
-                            // onClick="gfg_Run()"
-                            // handleOpenPay(count+1)
-                            id={index_j + cols_num * index_i + 1}
+                            className= "btn block btn-secondary stadBtn"
+                            id={index_j + colsNum * index_i + 1}
                             onClick={() => {
+                              setReservedSeat(index_j + colsNum * index_i + 1)
                               // setOpenPay(true);
                               // disableArray.push(index_j+cols_num*index_i+1)
                               // console.log(disableArray)
@@ -501,16 +481,15 @@ function FanHome() {
                               // document.getElementById(index_j+cols_num*index_i+1).style.backgroundColor="#41403e"
                             }}
                             disabled={
-                              isSubmitted[index_j + cols_num * index_i + 1]
+                              isSubmitted[index_j + colsNum * index_i + 1]
                             }
                           >
-                            {index_j + cols_num * index_i + 1}
+                            {index_j + colsNum * index_i + 1}
                           </button>
                         </Col>
                       ))}
                     </Row>
                   ))}
-
                   <div>
                     <Dialog
                       fullScreen={fullScreen}
@@ -547,8 +526,8 @@ function FanHome() {
                               type="submit"
                               className="btn btn-warning"
                               onClick={() => {
-                                isSubmitted[btnToDisable] = 1;
-                                handleClosePay();
+                                handleSaveReservation()
+                                setOpenPay(false)
                               }}
                             >
                               Submit
