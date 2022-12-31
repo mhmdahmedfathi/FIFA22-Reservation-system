@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { faEye, faFutbol } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { add_editMatch, fetchMatchs, fetchTeams, fetchStadiums, fetchReferees } from './Helpers/Mgmt';
+import { fetchMatchs } from './Helpers/Mgmt';
 import { fetchFan, editFan, addReservation, fetchReservedSeats } from "./Helpers/fan";
 import useCurrentState from "../hooks/useCurrentState";
 import { logout } from "./Helpers/auth";
@@ -13,7 +13,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dialog from "@mui/material/Dialog";
-import fanprofile from "./FanProfile";
+import FanProfile from "./FanProfile";
 import CreditCard from "./CreditCard";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -24,7 +24,7 @@ function FanHome() {
   const [fan, setFan] = useState([]);
   // const [addReservation, setAddReservation] = useState([]);
   const [reservedSeat, setReservedSeat] = useState(0);
-  const [reservedMatchID, setReservedMatchID] = useState(0);
+  const [reservedMatchID, setReservedMatchID] = useState(2);
   const [rowsNum, setRowsNum] = useState(0);
   const [colsNum, setColsNum] = useState(0);
 
@@ -40,10 +40,11 @@ function FanHome() {
   const [referees, setreferees] = useState([]);
 
   const name = useSelector((state) => state.auth.username);
+  console.log(name)
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchUser = async () => {
-      dispatch(getUser());
+      await dispatch(getUser());
     };
     if (name.length === 0) {
       fetchUser();
@@ -51,13 +52,14 @@ function FanHome() {
   }, []);
 
   useEffect(() => {
-    fetchFan(name, setFan)
-    fetchReservedSeats(reservedMatchID, setReservedSeat)
-    fetchMatchs(setmatchs);
-    fetchTeams(setTeams)
-    fetchStadiums(setstadiums)
-    fetchReferees(setreferees)
-  }, []);
+    if (name.length != 0) {
+      console.log("hii", name)
+      fetchFan(name, setFan)
+      fetchReservedSeats(reservedMatchID, setReservedSeat)
+      fetchMatchs(setmatchs);
+    }
+    
+  }, [name, reservedMatchID]);
 
   // for the matches
 
@@ -135,15 +137,15 @@ function FanHome() {
       Lineman1: LineMan1,
       Limeman2: LineMan2,
     };
-    const res = await add_editMatch(match, add);
-    if (res.status === 200) {
-      setisEditable(false);
-      setshowenMatch(false);
-      fetchMatchs(setmatchs);
-      setadd(false);
-    } else {
-      seterror("something went wrong");
-    }
+    // const res = await add_editMatch(match, add);
+    // if (res.status === 200) {
+    //   // setisEditable(false);
+    //   // setshowenMatch(false);
+    //   // fetchMatchs(setmatchs);
+    //   // setadd(false);
+    // } else {
+    //   seterror("something went wrong");
+    // }
   };
 
   const handleSaveReservation = async (e) => {
@@ -223,7 +225,8 @@ function FanHome() {
           <a className="navbar-brand" style={{ color: "white" }}>
             FIFA WORLD CUP 22
           </a>
-          {fanprofile()}
+          {/* {fanprofile()} */}
+          <FanProfile />
         </div>
       </nav>
       <h1 className="mt-2 pt-5 text-center fw-bold"> Matches</h1>

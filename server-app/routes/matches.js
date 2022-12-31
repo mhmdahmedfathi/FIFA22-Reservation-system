@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
     { model: Referee, as: "ref1", attributes: ['name'] },
     { model: Referee, as: "ref2", attributes: ['name'] },
     { model: Referee, as: "ref3", attributes: ['name'] },
-    { model: Stadium, attributes: ['name'] }
+    { model: Stadium, attributes: ['name' ,'rows' , 'seatsPerRow'] }
     ]
 
   }).then((match) => {
@@ -37,7 +37,7 @@ router.get("/:matchid", (req, res) => {
     { model: Referee, as: "ref1", attributes: ['name'] },
     { model: Referee, as: "ref2", attributes: ['name'] },
     { model: Referee, as: "ref3", attributes: ['name'] },
-    { model: Stadium, attributes: ['name'] }
+    { model: Stadium, attributes: ['name' ,'rows' , 'seatsPerRow'] }
     ]
 
   }).then((match) => {
