@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import useInput from "../hooks/useInput";
+import { getUser } from "../StateManagment/Auth/actions";
 import { login } from "./Helpers/auth";
 
 function Login() {
@@ -8,6 +10,17 @@ function Login() {
   const [user_role, setRole] = useState(false);
   const [error, seterror] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchUser = async () => {
+      dispatch(getUser());
+    };
+    if (auth.username.length === 0) {
+      fetchUser();
+    }
+  }, []);
 
   const {
     value: name,
@@ -32,7 +45,7 @@ function Login() {
     console.log(res);
     if (res.status === true) {
       setSuccess(true);
-      setRole(res.data.role);
+      setRole(res.data.user.role);
     } else {
       console.log(res);
       seterror(res.error.data.error);
@@ -40,14 +53,8 @@ function Login() {
     setLoading(false);
   };
 
-  if (success) {
-    if (user_role === "Admin") {
-      return <Redirect to="/admin/dashboard" />;
-    } else if (user_role === "Manager") {
-      return <Redirect to="/manager/dashboard" />;
-    } else {
-      return <Redirect to="/fan" />;
-    }
+  if (success || auth.role) {
+    return <Redirect to="/" />;
   }
   return (
     <div

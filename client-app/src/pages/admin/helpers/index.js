@@ -103,14 +103,20 @@ import AxiosConfiged from "../../../axiosConfig";
 //     }];
 
 export const fetchUsers = async (setUsers, setnewManagers) => {
-    try {
-        const response = await AxiosConfiged.get(`/users`);
-        let new_mngt = response.data.filter((user) => user.role === 'manager' && user.is_approved === false);
-        let users = response.data.filter((user) => !(user.role === 'manager' && user.is_approved === false) && user.role !== 'Admin');
-        setnewManagers(new_mngt);
-        setUsers(users);
-        return true;
-    } catch (error) {
-        return error.message;
-    }
-}
+  try {
+    const response = await AxiosConfiged.get(`/users`);
+    let new_mngt = response.data.filter(
+      (user) => user.role === "Manager" && user.isApproved === false,
+    );
+    let users = response.data.filter(
+      (user) =>
+        !(user.role === "Manager" && user.isApproved === false) &&
+        user.role !== "Admin",
+    );
+    setnewManagers(new_mngt);
+    setUsers(users);
+    return true;
+  } catch (error) {
+    return error.message;
+  }
+};

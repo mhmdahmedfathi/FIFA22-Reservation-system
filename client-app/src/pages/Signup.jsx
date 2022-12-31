@@ -4,12 +4,24 @@ import useCurrentState from "./../hooks/useCurrentState";
 import useInput from "./../hooks/useInput";
 import { signup } from "./Helpers/auth";
 import "./admin/admin.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../StateManagment/Auth/actions";
 
 function Signup() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [BackendError, setBackendError] = useState();
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchUser = async () => {
+      dispatch(getUser());
+    };
+    if (auth.username.length === 0) {
+      fetchUser();
+    }
+  }, []);
 
   const {
     value: name,
@@ -160,7 +172,7 @@ function Signup() {
     setLoading(false);
   };
 
-  if (success) {
+  if (success || auth.username.length > 0) {
     return <Redirect to="/login" />;
   }
   return (

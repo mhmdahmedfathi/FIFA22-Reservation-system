@@ -1,7 +1,10 @@
 tr {
-    background-color: white;
+  background-color: white;
 }
 
+.body_table {
+  vertical-align: baseline !important;
+}
 body {
-    background-color: antiquewhite;
+  background-color: antiquewhite;
 }

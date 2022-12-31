@@ -5,32 +5,32 @@ import { Route, Redirect } from "react-router-dom";
 import { getUser } from "../StateManagment/Auth/actions";
 
 const ManagerRoute = ({ component: Component, ...rest }) => {
-    const role = useSelector((state) => state.auth.role);
-    const dispatch = useDispatch();
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-        const fetchUser = async () => {
-            await dispatch(getUser());
-            setIsLoading(false);
-        };
-        if (role.length === 0) {
-            fetchUser();
-        }
-    }, []);
-    return isLoading ? (
-        <div>Loading...</div>
-    ) : (
-        <Route
-            {...rest}
-            render={(props) =>
-                role === "manager" ? (
-                    <Component {...props} />
-                ) : (
-                    <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-                )
-            }
-        />
-    );
+  const role = useSelector((state) => state.auth.role);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchUser = async () => {
+      await dispatch(getUser());
+      setIsLoading(false);
+    };
+    if (role.length === 0) {
+      fetchUser();
+    }
+  }, []);
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : (
+    <Route
+      {...rest}
+      render={(props) =>
+        role === "Manager" ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+        )
+      }
+    />
+  );
 };
 
 export default ManagerRoute;
