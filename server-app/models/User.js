@@ -28,7 +28,7 @@ const User = db.define('User', {
     unique: true
   },
   birthdate: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING,
     allowNull: false
   },
   gender: {

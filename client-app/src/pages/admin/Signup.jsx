@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import useCurrentState from "../../hooks/useCurrentState";
 import useInput from "../../hooks/useInput";
+import { getUser } from "../../StateManagment/Auth/actions";
 import { signup } from "../Helpers/auth";
 import "./admin.css";
 
@@ -10,6 +12,16 @@ function AdminSignup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [BackendError, setBackendError] = useState();
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchUser = async () => {
+      dispatch(getUser());
+    };
+    if (auth.username.length === 0) {
+      fetchUser();
+    }
+  }, []);
 
   const {
     value: name,
@@ -127,12 +139,24 @@ function AdminSignup() {
       setSuccess(true);
     } else {
       console.log(res.error);
-      setBackendError(res.error.data.error);
+      let log_error = "";
+      for (var key in res.error.data.errors) {
+        console.log(key);
+        if (res.error.data.errors.hasOwnProperty(key)) {
+          log_error +=
+            res.error.data.errors[key].value +
+            " =>  " +
+            res.error.data.errors[key].msg +
+            "\n";
+        }
+      }
+      console.log(log_error);
+      setBackendError(log_error);
     }
     setLoading(false);
   };
 
-  if (success) {
+  if (success || auth.username.length > 0) {
     return <Redirect to="/login" />;
   }
 

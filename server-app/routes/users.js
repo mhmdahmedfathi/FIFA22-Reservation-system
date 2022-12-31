@@ -5,6 +5,8 @@ const user = require("../models/User");
 const { verify } = require("jsonwebtoken");
 const Roles = require('../helpers/roles.js');
 const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // Admin routes 
 
@@ -71,7 +73,9 @@ router.put("/:username",
     .custom((value) => {
       return user.findOne({ where: { username: value } }).then((user) => {
         if (user) {
-          return Promise.reject('Username already in use');
+        if (user.username == value) {
+            return Promise.reject('Username already in use');
+          }
         }
       });
     }),
@@ -82,15 +86,12 @@ router.put("/:username",
     .custom((value) => {
       return user.findOne({ where: { email: value } }).then((user) => {
         if (user) {
-          return Promise.reject('Email already in use');
+          if (user.email == value) {
+            return Promise.reject('Email already in use');
+          }
         }
       });
     }),
-  body('password')
-    .notEmpty()
-    .withMessage('Password is required')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters long'),
   body('firstname')
     .notEmpty()
     .withMessage('First name is required')
@@ -130,7 +131,6 @@ router.put("/:username",
       user.update({
         username: req.body.username,
         email: req.body.email,
-        password: hashedPassword,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         birthdate: req.body.birthdate,
@@ -179,7 +179,9 @@ router.put("/profile/:username",
     .custom((value) => {
       return user.findOne({ where: { username: value } }).then((user) => {
         if (user) {
-          return Promise.reject('Username already in use');
+          if (user.username != value) {
+            return Promise.reject('Username already in use');
+          }
         }
       });
     }),
@@ -190,15 +192,12 @@ router.put("/profile/:username",
     .custom((value) => {
       return user.findOne({ where: { email: value } }).then((user) => {
         if (user) {
-          return Promise.reject('Email already in use');
+          if (user.email != value) {
+            return Promise.reject('Email already in use');
+          }
         }
       });
     }),
-  body('password')
-    .notEmpty()
-    .withMessage('Password is required')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters long'),
   body('firstname')
     .notEmpty()
     .withMessage('First name is required')
@@ -227,6 +226,8 @@ router.put("/profile/:username",
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+    // const hashedPassword = bcrypt.hashSync(req.body.password.toString(), saltRounds);
+
     user.findOne({
       where: {
         username: req.params.username
@@ -238,7 +239,6 @@ router.put("/profile/:username",
       user.update({
         username: req.body.username,
         email: req.body.email,
-        password: hashedPassword,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         birthdate: req.body.birthdate,
@@ -256,6 +256,8 @@ router.put("/profile/:username",
     ).catch((err) => {
       res.status(500).json({ error: err });
     }
+    
+    
     );
   });
 
