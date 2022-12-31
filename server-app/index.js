@@ -21,7 +21,7 @@ app.use('/' , require('./routes/auth'));
 app.use('/teams' , require('./routes/teams'));
 app.use('/matches' , require('./routes/matches'));
 app.use('/referees' , require('./routes/referee'));
-
+app.use('/reservations' , require('./routes/reservations'));
 // global error handler
 app.use(errorHandler);
 // server listening 
