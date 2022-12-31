@@ -112,7 +112,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (error) {
+    if (error && error !== BackendError) {
       return;
     } else if (gender === "") {
       setError(
