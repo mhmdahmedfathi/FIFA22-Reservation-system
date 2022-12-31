@@ -29,9 +29,9 @@ export const addReservation = async (reservation) => {
     }
 }
 
-export const fetchReservedSeats = async (match, setReservedSeats) => {
+export const fetchReservedSeats = async (matchID, setReservedSeats) => {
     try {
-        const response = await AxiosConfiged.get(`/reservations/${match.id}`);
+        const response = await AxiosConfiged.get(`/reservations/${matchID}`);
         setReservedSeats(response.data);
         return true;
     } catch (error) {
