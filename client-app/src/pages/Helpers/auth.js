@@ -25,10 +25,10 @@ const login = async (LoginData) => {
 
 const logout = async () => {
     try {
-        const response = await AxiosConfiged.post(`/logout`);
+        // const response = await AxiosConfiged.post(`/logout`);
         localStorage.removeItem('token');
         authAction.loggedOut();
-        return response.data;
+        return true;
     } catch (error) {
         return error.message;
     }
