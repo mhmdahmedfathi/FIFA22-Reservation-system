@@ -1,4 +1,8 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import useCurrentState from "../hooks/useCurrentState";
+import { getUser } from '../StateManagment/Auth/actions';
+import { fetchFan, editFan } from "./Helpers/fan";
 // import { Typography } from '@mui/material';
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -16,10 +20,114 @@ import Nav from "react-bootstrap/Nav";
 import { logout } from "./Helpers/auth";
 
 export default function ResponsiveDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [edit, setEdit] = React.useState(false);
+  const [fan, setFan] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const name = useSelector((state) => state.auth.username);
+  const dispatch = useDispatch();
+  useEffect(() => {
+      const fetchUser = async () => {
+          dispatch(getUser());
+      };
+      if (name.length === 0) {
+          fetchUser();
+      }
+  }, []);
+
+  useEffect(() => {
+    fetchFan(name, setFan)
+  }, [name]);
+
+  const {
+    value: email,
+    error: errorEmail,
+    handleChange: changeEmail,
+    handleEvent: handleEmail,
+  } = useCurrentState((value) => {});
+
+  const {
+    value: FirstName,
+    error: errorFirstName,
+    handleChange: changeFirstName,
+    handleEvent: handleFirstName,
+  } = useCurrentState((value) => {});
+
+  const {
+    value: LastName,
+    error: errorLastName,
+    handleChange: changeLastName,
+    handleEvent: handleLastName,
+  } = useCurrentState((value) => {});
+
+  const {
+    value: BirthDate,
+    error: errorBirthDate,
+    handleChange: changeBirthDate,
+    handleEvent: handleBirthDate,
+  } = useCurrentState((value) => {});
+
+  const {
+    value: Gender,
+    error: errorGender,
+    handleChange: changeGender,
+    handleEvent: handleGender,
+  } = useCurrentState((value) => {});
+
+  const {
+    value: Nationality,
+    error: errorNationality,
+    handleChange: changeNationality,
+    handleEvent: handleNationality,
+  } = useCurrentState((value) => {});
+
+  const {
+    value: Role,
+    error: errorRole,
+    handleChange: changeRole,
+    handleEvent: handleRole,
+  } = useCurrentState((value) => {});
+
+  const {
+    value: Password,
+    error: errorPassword,
+    handleChange: changePassword,
+    handleEvent: handlePassword,
+  } = useCurrentState((value) => {} );
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    let fan = {
+      username: name,
+      email: email,
+      firstname: FirstName,
+      lastname: LastName,
+      birthdate: BirthDate,
+      gender: Gender,
+      nationality: Nationality,
+      role: Role,
+      password: Password
+    };
+    const res = await editFan(fan);
+    if (res.status === 200) {
+        setEdit(false);
+        fetchFan(name, setFan);
+    } else {
+        // seterror("something went wrong");
+    }
+}
+
+const saveState = (fan) => {
+    changeFirstName(fan.firstname);
+    changeLastName(fan.lastname);
+    changeBirthDate(fan.birthdate);
+    changeGender(fan.gender);
+    changeNationality(fan.nationality);
+    changeRole(fan.role);
+    changePassword(fan.password);
+}
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,10 +140,12 @@ export default function ResponsiveDialog() {
 
   const handleClickProfile = () => {
     setEdit(false);
+    saveState(fan)
   };
 
   const handleEdit = () => {
     setEdit(true);
+    saveState(fan)
   };
 
   const logOut = () => {
@@ -72,7 +182,7 @@ export default function ResponsiveDialog() {
             </Nav.Item>
           </Nav>
           <div className="ProfileForm" id="profileForm">
-            <form encType="multipart/form-data">
+            <form encType="multipart/form-data" onSubmit={handleSave}>
               <div className="row align-items-end">
                 <div className="col-12 col-md-6 form-group mb-3">
                   <label htmlFor="title">Username</label>
@@ -85,8 +195,7 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={true}
-                    //   value={team1}
-                    //   onChange={handleTeam1}
+                    value={name}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -100,8 +209,7 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={true}
-                    //   value={team2}
-                    //   onChange={handleTeam2}
+                    value={email}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -115,8 +223,8 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    //   value={MatchVenue}
-                    //   onChange={handleMatchVenue}
+                    value={edit? FirstName: fan.firstname}
+                    onChange={handleFirstName}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -130,8 +238,8 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    //   value={date}
-                    //   onChange={handleDate}
+                    value={LastName}
+                    onChange={handleLastName}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -145,8 +253,8 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    //   value={time}
-                    //   onChange={handleTime}
+                    value={BirthDate}
+                    onChange={handleBirthDate}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -160,8 +268,8 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    //   value={MainReferee}
-                    //   onChange={handleMainReferee}
+                    value={Gender}
+                    onChange={handleGender}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -175,8 +283,8 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    //   value={LineMan1}
-                    //   onChange={handleLineMan1}
+                    value={Nationality}
+                    onChange={handleNationality}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -190,8 +298,8 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    //   value={LineMan2}
-                    //   onChange={handleLineMan2}
+                    value={Role}
+                    onChange={handleRole}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -205,8 +313,8 @@ export default function ResponsiveDialog() {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    //   value={LineMan2}
-                    //   onChange={handleLineMan2}
+                    value={Password}
+                    onChange={handlePassword}
                   />
                 </div>
               </div>
