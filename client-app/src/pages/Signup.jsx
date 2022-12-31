@@ -161,7 +161,7 @@ function Signup() {
   };
 
   if (success) {
-    return <Redirect to="/admin/login" />;
+    return <Redirect to="/login" />;
   }
   return (
     <div
