@@ -15,7 +15,7 @@ router.get("/:id" , authorize([Roles.Manager, Roles.Fan]), (req, res) => {
     reservation.forEach((element) => {
       setNumbers.push(element.setNumber);
     });
-    res.json({setNumbers: setNumbers});
+    res.json({seatNumbers: setNumbers});
   }).catch((err) => {
     res.status(500).json({ error: err });
   });
@@ -26,7 +26,7 @@ router.post("/", authorize([Roles.Fan]), (req, res) => {
   // check wether the set is already reserved
   reservation.findOne({
     where: {
-      setNumber: req.body.setNumber,
+      setNumber: req.body.seatNumber,
       MatchId: req.body.matchId
     }
   }).then((reservation_val) => {
@@ -35,7 +35,7 @@ router.post("/", authorize([Roles.Fan]), (req, res) => {
     }
     reservation.create({
       date: Date.now(),
-      setNumber: req.body.setNumber,
+      setNumber: req.body.seatNumber,
       MatchId: req.body.matchId,
       UserId: req.user.id
     }).then((reservation) => {
