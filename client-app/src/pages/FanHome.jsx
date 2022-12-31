@@ -4,12 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchMatchs } from "./Helpers/Mgmt";
 import {
   fetchFan,
-  editFan,
   addReservation,
   fetchReservedSeats,
+  cancelReservation,
 } from "./Helpers/fan";
 import useCurrentState from "../hooks/useCurrentState";
-import { logout } from "./Helpers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../StateManagment/Auth/actions";
 import "./mgmt.css";
@@ -27,13 +26,19 @@ import { useTheme } from "@mui/material/styles";
 
 function FanHome() {
   const [fan, setFan] = useState([]);
-  // const [addReservation, setAddReservation] = useState([]);
   const [reservedSeat, setReservedSeat] = useState(0);
   const [reservedSeats, setReservedSeats] = useState([]);
+  const [viewTicket, setViewTicket] = useState(false);
+  const [ticketNumber, setTicketNumber] = useState(0);
+  const [cancelSeat, setCancelSeat] = useState(false);
+  const [cancelledSeat, setCancelledSeat] = useState(0);
   const [reservedMatchID, setReservedMatchID] = useState(1);
   const [rowsNum, setRowsNum] = useState(0);
   const [colsNum, setColsNum] = useState(0);
-
+  const [openPay, setOpenPay] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  
   const [matchs, setmatchs] = useState([]);
   const [showenMatch, setshowenMatch] = useState(false);
   const [isEditable, setisEditable] = useState(false);
@@ -41,9 +46,6 @@ function FanHome() {
   const [error, seterror] = useState("");
   const [add, setadd] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
-  const [Teams, setTeams] = useState(false);
-  const [stadiums, setstadiums] = useState([]);
-  const [referees, setreferees] = useState([]);
 
   const name = useSelector((state) => state.auth.username) || "";
   console.log(name);
@@ -129,48 +131,6 @@ function FanHome() {
     handleEvent: handleLineMan2,
   } = useCurrentState((value) => value.length < 3);
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-    let match = {
-      id: holdID,
-      team1: team1,
-      team2: team2,
-      MatchVenue: MatchVenue,
-      Date: date,
-      Time: time,
-      MainReferee: MainReferee,
-      Lineman1: LineMan1,
-      Limeman2: LineMan2,
-    };
-    // const res = await add_editMatch(match, add);
-    // if (res.status === 200) {
-    //   // setisEditable(false);
-    //   // setshowenMatch(false);
-    //   // fetchMatchs(setmatchs);
-    //   // setadd(false);
-    // } else {
-    //   seterror("something went wrong");
-    // }
-  };
-
-  const handleSaveReservation = async (e) => {
-    // console.log("saving reservation")
-    console.log("hi match", reservedMatchID)
-    e.preventDefault();
-    let reservation = {
-      date: Date.now.toString(),
-      seatNumber: reservedSeat,
-      userid: fan.id,
-      matchId: 1,
-    };
-    console.log("saving reservation")
-    const res = await addReservation(reservation);
-    if (res.status === 200) {
-    } else {
-      seterror("something went wrong");
-    }
-  };
-
   const saveState = (match) => {
     console.log(match.Stadium.name);
     setholdID(match.id);
@@ -190,24 +150,48 @@ function FanHome() {
     saveState(match);
   };
 
-  const [seatDisable, setSeatDisable] = React.useState(false);
+  const handleSaveReservation = async (e) => {
+    e.preventDefault();
+    let reservation = {
+      date: Date.now.toString(),
+      seatNumber: reservedSeat,
+      userid: fan.id,
+      matchId: reservedMatchID,
+    };
+    const res = await addReservation(reservation);
+    if (res.status === 200) {
+      setTicketNumber(res.data.id)
+    } else {
+      seterror("something went wrong");
+    }
+  };
+
+  const handleCancelReservation = async (e) => {
+    e.preventDefault();
+    const res = await cancelReservation(reservedMatchID,cancelledSeat);
+    if (res.status === 200) {
+
+    } else {
+      seterror("something went wrong with cancellation");
+      console.log(error)
+    }
+  };
 
   const handleReserve = (match) => {
+    setCancelSeat(false)
     setShowGrid(true);
     setReservedMatchID(match.id);
     setRowsNum(match.Stadium.rows);
     setColsNum(match.Stadium.seatsPerRow);
   };
 
-  const handleReserveSeat = () => {
-    setSeatDisable(true);
+  const handleCancelSeats = (match) => {
+    setCancelSeat(true)
+    setShowGrid(true);
+    setReservedMatchID(match.id);
+    setRowsNum(match.Stadium.rows);
+    setColsNum(match.Stadium.seatsPerRow);
   };
-
-  const [openPay, setOpenPay] = React.useState(false);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
-  let disableArray = [];
 
   const handleOpenPay = () => {
     setOpenPay(true);
@@ -221,12 +205,11 @@ function FanHome() {
   for (let i = 0; i < rowsNum * colsNum; i++) {
     isSubmitted.push(0);
   }
-
+  
   for (let i=0 ; i<reservedSeats.length; i++){
     isSubmitted[reservedSeats[i]] = 1;
   }
  
-
   return (
     <div>
       <nav className="navbar sticky-top navbar-black bg-black">
@@ -293,7 +276,7 @@ function FanHome() {
                           <button
                             className="btn btn-myedit btn-link text-decoration-none text-danger"
                             onClick={() => {
-                              handleReserve(match);
+                              handleCancelSeats(match);
                             }}
                           >
                             cancel{" "}
@@ -322,7 +305,7 @@ function FanHome() {
                   {error}
                 </div>
               )}
-              <form encType="multipart/form-data" onSubmit={handleSave}>
+              <form encType="multipart/form-data">
                 <div className="row align-items-end">
                   <div className="col-12 col-md-6 form-group mb-3">
                     <label htmlFor="title">Team 1</label>
@@ -469,7 +452,7 @@ function FanHome() {
         <div className="col-12 col-md-12">
           {showGrid && (
             <>
-              <h1 className="mt-2 pt-5 text-center fw-bold"> Match Reserve</h1>
+              <h1 className="mt-2 pt-5 text-center fw-bold"> Match Stadium Grid</h1>
               {error && (
                 <div className="alert alert-danger p-2 mb-1" role="alert">
                   {error}
@@ -485,18 +468,14 @@ function FanHome() {
                           <button
                             className="btn block btn-secondary stadBtn"
                             id={index_j + colsNum * index_i + 1}
-                            onClick={() => {
-                              setReservedSeat(index_j + colsNum * index_i + 1);
+                            onClick={(e) => {
                               setOpenPay(true);
-                              // disableArray.push(index_j+cols_num*index_i+1)
-                              // console.log(disableArray)
-                              // console.log(isSubmitted)
-                              // btnToDisable = index_j+cols_num*index_i+1
-                              // changeBtnColor()
-                              // document.getElementById(index_j+cols_num*index_i+1).style.backgroundColor="#41403e"
+                              {cancelSeat ? setCancelledSeat(index_j + colsNum * index_i + 1) :
+                                setReservedSeat(index_j + colsNum * index_i + 1);
+                              }
                             }}
                             disabled={
-                              isSubmitted[index_j + colsNum * index_i + 1]
+                              cancelSeat ? !isSubmitted[index_j + colsNum * index_i + 1] : isSubmitted[index_j + colsNum * index_i + 1]
                             }
                           >
                             {index_j + colsNum * index_i + 1}
@@ -541,8 +520,9 @@ function FanHome() {
                               type="submit"
                               className="btn btn-warning"
                               onClick={(e) => {
-                                handleSaveReservation(e);
                                 setOpenPay(false);
+                                setViewTicket(true);
+                                {cancelSeat ? handleCancelReservation(e): handleSaveReservation(e)};
                               }}
                             >
                               Submit
@@ -558,6 +538,11 @@ function FanHome() {
                         </div>
                       </DialogContent>
                     </Dialog>
+                    {viewTicket && (
+                            <div className="alert alert-success" role="alert">
+                            Your Ticket Number {ticketNumber}
+                          </div>
+                          )}
                   </div>
                 </Container>
               </div>

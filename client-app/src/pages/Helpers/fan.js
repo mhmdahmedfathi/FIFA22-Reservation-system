@@ -23,7 +23,7 @@ export const editFan = async (fan) => {
 export const addReservation = async (reservation) => {
     try {
         const response = await AxiosConfiged.post(`/reservations`, reservation);
-        return response.data;
+        return response;
     } catch (error) {
         return error.message;
     }
@@ -32,9 +32,19 @@ export const addReservation = async (reservation) => {
 export const fetchReservedSeats = async (matchID, setReservedSeats) => {
     try {
         const response = await AxiosConfiged.get(`/reservations/${matchID}`);
-        setReservedSeats(response.data);
+        setReservedSeats(response.data.seatNumbers);
         return true;
     } catch (error) {
         return error.message;
     }
 }
+
+export const cancelReservation = async (matchID, seatNumber) => {
+    try {
+        const response = await AxiosConfiged.delete(`/reservations/${matchID}/${seatNumber}`);
+        return response;
+    } catch (error) {
+        return error.message;
+    }
+}
+

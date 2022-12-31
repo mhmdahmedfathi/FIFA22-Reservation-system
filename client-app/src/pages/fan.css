@@ -78,3 +78,8 @@
   display: block;
   width: 20%;
 }
+
+.alert {
+  /* position: absolute; */
+  text-align: center;
+}
