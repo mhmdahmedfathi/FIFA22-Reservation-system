@@ -54,7 +54,7 @@ function Login() {
   };
 
   if (success || auth.role) {
-    return <Redirect to="/" />;
+    window.location.href = "/";
   }
   return (
     <div

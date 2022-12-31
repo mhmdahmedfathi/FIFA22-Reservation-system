@@ -1,0 +1,20 @@
+.container2 {
+  background-image: url("https://digitalhub.fifa.com/transform/b0201811-9b04-4f90-aa4a-a33338f07fea/OFFICIAL-MATCH-BALL-WORLD-CUP-2022?io=transform:fill,aspectratio:16x9,width:2048&quality=100&io=overlay:box,color:000f2c,opacity:15");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.row2 {
+  display: flex;
+  width: 50%;
+  justify-content: left;
+  align-items: top;
+  margin-top: 10%;
+}

@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import MgmtDashboard from "./pages/MgmtDashboard";
 import FanHome from "./pages/FanHome";
+import LandingPage from "./pages/LandingPage";
 function Routes() {
   return (
     <>
@@ -20,6 +21,7 @@ function Routes() {
         <ManagerRoute path="/manager/dashboard" component={MgmtDashboard} />
         {/* <Route path="/signup" component={Signup} /> */}
         <Route path="/fan" component={FanHome} />
+        <Route path="/" component={LandingPage} />
         <Route path="*" component={() => Redirect("/login")} />
       </Switch>
     </>

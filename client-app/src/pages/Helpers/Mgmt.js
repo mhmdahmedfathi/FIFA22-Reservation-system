@@ -118,7 +118,7 @@ export const add_editMatch = async (match, add) => {
   try {
     if (add) {
       const response = await AxiosConfiged.post(`/matches/create`, match);
-      return response.data;
+      return response;
     }
     const response = await AxiosConfiged.put(`/matches/${match.id}`, match);
     return response;
@@ -130,7 +130,7 @@ export const add_editMatch = async (match, add) => {
 export const addStadium = async (stadium) => {
   try {
     const response = await AxiosConfiged.post(`/stadiums`, stadium);
-    return response.data;
+    return response;
   } catch (error) {
     return error.message;
   }

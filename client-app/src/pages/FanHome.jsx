@@ -38,7 +38,7 @@ function FanHome() {
   const [openPay, setOpenPay] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-  
+
   const [matchs, setmatchs] = useState([]);
   const [showenMatch, setshowenMatch] = useState(false);
   const [isEditable, setisEditable] = useState(false);
@@ -160,7 +160,7 @@ function FanHome() {
     };
     const res = await addReservation(reservation);
     if (res.status === 200) {
-      setTicketNumber(res.data.id)
+      setTicketNumber(res.data.id);
     } else {
       seterror("something went wrong");
     }
@@ -168,17 +168,16 @@ function FanHome() {
 
   const handleCancelReservation = async (e) => {
     e.preventDefault();
-    const res = await cancelReservation(reservedMatchID,cancelledSeat);
+    const res = await cancelReservation(reservedMatchID, cancelledSeat);
     if (res.status === 200) {
-
     } else {
       seterror("something went wrong with cancellation");
-      console.log(error)
+      console.log(error);
     }
   };
 
   const handleReserve = (match) => {
-    setCancelSeat(false)
+    setCancelSeat(false);
     setShowGrid(true);
     setReservedMatchID(match.id);
     setRowsNum(match.Stadium.rows);
@@ -186,7 +185,7 @@ function FanHome() {
   };
 
   const handleCancelSeats = (match) => {
-    setCancelSeat(true)
+    setCancelSeat(true);
     setShowGrid(true);
     setReservedMatchID(match.id);
     setRowsNum(match.Stadium.rows);
@@ -202,14 +201,16 @@ function FanHome() {
   };
 
   let isSubmitted = [];
-  for (let i = 0; i < rowsNum * colsNum; i++) {
-    isSubmitted.push(0);
-  }
-  
-  for (let i=0 ; i<reservedSeats.length; i++){
-    isSubmitted[reservedSeats[i]] = 1;
-  }
- 
+  setTimeout(() => {
+    fetchReservedSeats(reservedMatchID, setReservedSeats);
+    for (let i = 0; i < rowsNum * colsNum; i++) {
+      isSubmitted.push(0);
+    }
+
+    for (let i = 0; i < reservedSeats.length; i++) {
+      isSubmitted[reservedSeats[i]] = 1;
+    }
+  }, 3000);
   return (
     <div>
       <nav className="navbar sticky-top navbar-black bg-black">
@@ -452,7 +453,10 @@ function FanHome() {
         <div className="col-12 col-md-12">
           {showGrid && (
             <>
-              <h1 className="mt-2 pt-5 text-center fw-bold"> Match Stadium Grid</h1>
+              <h1 className="mt-2 pt-5 text-center fw-bold">
+                {" "}
+                Match Stadium Grid
+              </h1>
               {error && (
                 <div className="alert alert-danger p-2 mb-1" role="alert">
                   {error}
@@ -470,12 +474,20 @@ function FanHome() {
                             id={index_j + colsNum * index_i + 1}
                             onClick={(e) => {
                               setOpenPay(true);
-                              {cancelSeat ? setCancelledSeat(index_j + colsNum * index_i + 1) :
-                                setReservedSeat(index_j + colsNum * index_i + 1);
+                              {
+                                cancelSeat
+                                  ? setCancelledSeat(
+                                      index_j + colsNum * index_i + 1,
+                                    )
+                                  : setReservedSeat(
+                                      index_j + colsNum * index_i + 1,
+                                    );
                               }
                             }}
                             disabled={
-                              cancelSeat ? !isSubmitted[index_j + colsNum * index_i + 1] : isSubmitted[index_j + colsNum * index_i + 1]
+                              cancelSeat
+                                ? !isSubmitted[index_j + colsNum * index_i + 1]
+                                : isSubmitted[index_j + colsNum * index_i + 1]
                             }
                           >
                             {index_j + colsNum * index_i + 1}
@@ -522,7 +534,11 @@ function FanHome() {
                               onClick={(e) => {
                                 setOpenPay(false);
                                 setViewTicket(true);
-                                {cancelSeat ? handleCancelReservation(e): handleSaveReservation(e)};
+                                {
+                                  cancelSeat
+                                    ? handleCancelReservation(e)
+                                    : handleSaveReservation(e);
+                                }
                               }}
                             >
                               Submit
@@ -539,10 +555,10 @@ function FanHome() {
                       </DialogContent>
                     </Dialog>
                     {viewTicket && (
-                            <div className="alert alert-success" role="alert">
-                            Your Ticket Number {ticketNumber}
-                          </div>
-                          )}
+                      <div className="alert alert-success" role="alert">
+                        Your Ticket Number {ticketNumber}
+                      </div>
+                    )}
                   </div>
                 </Container>
               </div>

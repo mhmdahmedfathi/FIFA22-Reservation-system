@@ -58,8 +58,8 @@ function Dashboard() {
             <a className="navbar-brand" style={{ color: "white" }}>
               Welcome {name}
             </a>
-            <a className="navbar-brand" style={{ color: "white" }}>
-              Dashboard
+            <a className="navbar-brand" style={{ color: "white" }} href="/">
+              Home page
             </a>
             <a
               className="navbar-brand"
@@ -144,7 +144,7 @@ function Dashboard() {
                       <td>{user.firstname}</td>
                       <td>{user.lastname}</td>
                       <td>{user.email}</td>
-                      <td>{user.gender === 0 ? "Female" : "Male"}</td>
+                      <td>{user.gender === false ? "Female" : "Male"}</td>
                       <td>{user.role}</td>
                       <td>
                         <button

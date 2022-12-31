@@ -152,6 +152,7 @@ function MgmtDashboard() {
   };
 
   const saveState = (match) => {
+    console.log(match);
     setholdID(match.id);
     changeTeam1(match.team1.name);
     changeTeam2(match.team2.name);
@@ -312,8 +313,8 @@ function MgmtDashboard() {
           <a className="navbar-brand" style={{ color: "white" }}>
             Welcome {name}
           </a>
-          <a className="navbar-brand" style={{ color: "white" }}>
-            Manager Dashboard
+          <a className="navbar-brand" style={{ color: "white" }} href="/">
+            Home page
           </a>
           <a
             className="navbar-brand"
@@ -439,9 +440,7 @@ function MgmtDashboard() {
                                   changeTeam1(team.name);
                                 }}
                               >
-                                <a className="dropdown-item" href="#">
-                                  {team.name}
-                                </a>
+                                <a className="dropdown-item">{team.name}</a>
                               </li>
                             ))}
                         </ul>
@@ -493,9 +492,7 @@ function MgmtDashboard() {
                                   changeTeam2(team.name);
                                 }}
                               >
-                                <a className="dropdown-item" href="#">
-                                  {team.name}
-                                </a>
+                                <a className="dropdown-item">{team.name}</a>
                               </li>
                             ))}
                         </ul>
@@ -543,9 +540,7 @@ function MgmtDashboard() {
                                   changeMatchVenue(stadium.name);
                                 }}
                               >
-                                <a className="dropdown-item" href="#">
-                                  {stadium.name}
-                                </a>
+                                <a className="dropdown-item">{stadium.name}</a>
                               </li>
                             ))}
                         </ul>
@@ -625,9 +620,7 @@ function MgmtDashboard() {
                                   changeMainReferee(referee.name);
                                 }}
                               >
-                                <a className="dropdown-item" href="#">
-                                  {referee.name}
-                                </a>
+                                <a className="dropdown-item">{referee.name}</a>
                               </li>
                             ))}
                         </ul>
@@ -675,9 +668,7 @@ function MgmtDashboard() {
                                   changeLineMan1(referee.name);
                                 }}
                               >
-                                <a className="dropdown-item" href="#">
-                                  {referee.name}
-                                </a>
+                                <a className="dropdown-item">{referee.name}</a>
                               </li>
                             ))}
                         </ul>
@@ -725,9 +716,7 @@ function MgmtDashboard() {
                                   changeLineMan2(referee.name);
                                 }}
                               >
-                                <a className="dropdown-item" href="#">
-                                  {referee.name}
-                                </a>
+                                <a className="dropdown-item">{referee.name}</a>
                               </li>
                             ))}
                         </ul>
