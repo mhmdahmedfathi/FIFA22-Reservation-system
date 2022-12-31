@@ -19,7 +19,7 @@ import "./fan.css";
 import Nav from "react-bootstrap/Nav";
 import { logout } from "./Helpers/auth";
 
-export default function ResponsiveDialog() {
+export default function FanProfile() {
   const [fan, setFan] = useState([]);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -27,10 +27,11 @@ export default function ResponsiveDialog() {
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const name = useSelector((state) => state.auth.username);
+  console.log("hi", name)
   const dispatch = useDispatch();
   useEffect(() => {
       const fetchUser = async () => {
-          dispatch(getUser());
+          await dispatch(getUser());
       };
       if (name.length === 0) {
           fetchUser();
@@ -38,7 +39,10 @@ export default function ResponsiveDialog() {
   }, []);
 
   useEffect(() => {
-    fetchFan(name, setFan)
+    if(name != 0){
+      fetchFan(name, setFan)
+    }
+    
   }, [name]);
 
   const {
