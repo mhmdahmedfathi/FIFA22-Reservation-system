@@ -8,7 +8,7 @@ const Match = require('./Match.js')
 const Reservation = db.define('Reservation', {
   // Model attributes are defined here
   date:{
-    type: DataTypes.DATE
+    type: DataTypes.STRING
   },
   setNumber:{
     type: DataTypes.INTEGER

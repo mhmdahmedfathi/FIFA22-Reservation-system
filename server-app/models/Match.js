@@ -9,13 +9,13 @@ const Team = require('./Team')
 // Define the model
 const Match = db.define('Match', {
   date:{
-    type: DataTypes.DATE
+    type: DataTypes.STRING
   },
   isFull:{
     type: DataTypes.BOOLEAN
   },
   time:{
-    type: DataTypes.TIME
+    type: DataTypes.STRING
   }
 });
 

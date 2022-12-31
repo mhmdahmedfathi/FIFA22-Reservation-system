@@ -57,8 +57,8 @@ router.get("/:matchid", (req, res) => {
 router.post("/create",
 body('date')
 .notEmpty()
-.isDate()
-.withMessage('Date is required and must be a date'),
+.isString()
+.withMessage('Date is required and must be a string'),
 body('time')
 .notEmpty()
 .withMessage('Time is required and must be a time'),
@@ -100,7 +100,7 @@ body('isFull')
   // check if the team is already have a match at the same day
   match.findOne({
     where: {
-      date: Date.parse(req.body.date),
+      date: req.body.date,
       [Op.or]: [{team1_id: req.body.team1}, { team1_id: req.body.team2 }],
       [Op.or]: [{team2_id: req.body.team1}, { team2_id: req.body.team2 }]
     }
@@ -111,7 +111,7 @@ body('isFull')
     // check if the stadium is already have a match at the same day
     match.findOne({
       where: {
-        date: Date.parse(req.body.date),
+        date: req.body.date,
         StadiumId: req.body.stadium_id
       }
     }).then((match_val) => {
@@ -155,6 +155,7 @@ router.put("/:matchid", authorize([Roles.Manager]), (req, res) => {
       ref2_id: req.body.referee2,
       ref3_id: req.body.referee3,
       StadiumId: req.body.stadium_id,
+      time: req.body.time
     }).then((match) => {
       res.json(match);
     }).catch((err) => {

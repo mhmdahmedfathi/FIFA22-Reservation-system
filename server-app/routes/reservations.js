@@ -34,7 +34,7 @@ router.post("/", authorize([Roles.Fan]), (req, res) => {
       return res.status(400).json({ error: "Set is already reserved" });
     }
     reservation.create({
-      date: Date.now(),
+      date: Date.now().toString(),
       setNumber: req.body.seatNumber,
       MatchId: req.body.matchId,
       UserId: req.user.id
@@ -68,7 +68,7 @@ router.delete("/:id", authorize([Roles.Fan]), (req, res) => {
     if (reservation_val.UserId != req.user.id) {
       return res.status(400).json({ error: "You are not the owner of this reservation" });
     }
-    if (reservation_val.Match.date < threeDaysAfterToday) {
+    if (new Date(reservation_val.Match.date) < threeDaysAfterToday) {
       return res.status(400).json({ error: "you can't cancel the ticket" });
     }
     reservation.destroy({
