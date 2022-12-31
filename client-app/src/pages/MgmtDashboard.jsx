@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
-import { faEye, faEdit, faList } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   addStadium,
@@ -29,6 +29,7 @@ function MgmtDashboard() {
   const [Teams, setTeams] = useState(false);
   const [stadiums, setstadiums] = useState([]);
   const [referees, setreferees] = useState([]);
+  const [isFull, setIsFull] = useState(false);
 
   useEffect(() => {
     fetchMatchs(setmatchs);
@@ -130,18 +131,20 @@ function MgmtDashboard() {
       id: holdID,
       team1: Teams.find((team) => team.name === team1).id,
       team2: Teams.find((team) => team.name === team2).id,
-      MatchVenue: stadiums.find((stadium) => stadium.name === MatchVenue).id,
-      Date: date,
-      Time: time,
-      MainReferee: referees.find((Referee) => Referee.name === MainReferee).id,
-      Lineman1: referees.find((Referee) => Referee.name === LineMan1).id,
-      Limeman2: referees.find((Referee) => Referee.name === LineMan2).id,
+      stadium_id: stadiums.find((stadium) => stadium.name === MatchVenue).id,
+      date: date,
+      time: time,
+      ref1: referees.find((Referee) => Referee.name === MainReferee).id,
+      ref2: referees.find((Referee) => Referee.name === LineMan1).id,
+      ref3: referees.find((Referee) => Referee.name === LineMan2).id,
+      isFull,
     };
     const res = await add_editMatch(match, add);
+    console.log(res);
     if (res.status === 200) {
       setisEditable(false);
       setshowenMatch(false);
-      fetchMatchs(setmatchs);
+      await fetchMatchs(setmatchs);
       setadd(false);
     } else {
       seterror("something went wrong");
@@ -153,11 +156,12 @@ function MgmtDashboard() {
     changeTeam1(match.team1.name);
     changeTeam2(match.team2.name);
     changeMatchVenue(match.Stadium.name);
-    changeDate(match.date || "2022-12-22");
+    changeDate(match.date.slice(0, 10) || "2022-12-22");
     changeTime(match.time || "20:00");
     changeMainReferee(match.ref1.name);
     changeLineMan1(match.ref2.name);
     changeLineMan2(match.ref3.name);
+    setIsFull(match.isFull);
   };
 
   const clearState = () => {
@@ -563,7 +567,9 @@ function MgmtDashboard() {
                       autoFocus
                       disabled={!isEditable}
                       value={date}
-                      onChange={handleDate}
+                      onChange={(e) => {
+                        changeDate(e.target.value);
+                      }}
                     />
                   </div>
                   <div className="col-12 col-md-6 form-group mb-3">

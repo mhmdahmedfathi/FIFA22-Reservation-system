@@ -17,7 +17,7 @@ function Routes() {
         <Route path="/signup" component={Signup} />
         <Route path="/admin/signup" component={AdminSignup} />
         <Route path="/admin/login" component={Login} />
-        <AdminRoute path="/manager/dashboard" component={MgmtDashboard} />
+        <ManagerRoute path="/manager/dashboard" component={MgmtDashboard} />
         {/* <Route path="/signup" component={Signup} /> */}
         <Route path="/fan" component={FanHome} />
         <Route path="*" component={() => Redirect("/login")} />
