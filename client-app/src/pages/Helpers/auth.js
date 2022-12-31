@@ -4,9 +4,11 @@ import AxiosConfiged from "../../axiosConfig";
 const signup = async (SignupData) => {
   try {
     const response = await AxiosConfiged.post(`/register`, SignupData);
-    return response.data;
+    if (response.data) {
+      return { data: response.data, status: true };
+    }
   } catch (error) {
-    return error.message;
+    return { error: error.response, status: false };
   }
 };
 
@@ -20,9 +22,10 @@ const login = async (LoginData) => {
         role: response.data.user.role,
       });
     }
-    return response;
+    return { data: response.data, status: true };
   } catch (error) {
-    return error.message;
+    console.log(error.response);
+    return { error: error.response, status: false };
   }
 };
 

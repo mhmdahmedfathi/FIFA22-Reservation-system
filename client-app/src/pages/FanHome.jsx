@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { faEye, faFutbol } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { add_editMatch, fetchMatchs, fetchTeams, fetchStadiums, fetchReferees } from './Helpers/Mgmt';
-import { fetchFan, editFan, addReservation, fetchReservedSeats } from "./Helpers/fan";
+import { fetchMatchs } from "./Helpers/Mgmt";
+import {
+  fetchFan,
+  editFan,
+  addReservation,
+  fetchReservedSeats,
+} from "./Helpers/fan";
 import useCurrentState from "../hooks/useCurrentState";
 import { logout } from "./Helpers/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +18,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Dialog from "@mui/material/Dialog";
-import fanprofile from "./FanProfile";
+import FanProfile from "./FanProfile";
 import CreditCard from "./CreditCard";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -24,7 +29,7 @@ function FanHome() {
   const [fan, setFan] = useState([]);
   // const [addReservation, setAddReservation] = useState([]);
   const [reservedSeat, setReservedSeat] = useState(0);
-  const [reservedMatchID, setReservedMatchID] = useState(0);
+  const [reservedMatchID, setReservedMatchID] = useState(2);
   const [rowsNum, setRowsNum] = useState(0);
   const [colsNum, setColsNum] = useState(0);
 
@@ -39,25 +44,26 @@ function FanHome() {
   const [stadiums, setstadiums] = useState([]);
   const [referees, setreferees] = useState([]);
 
-  const name = useSelector((state) => state.auth.username);
+  const name = useSelector((state) => state.auth.username) || "";
+  console.log(name);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchUser = async () => {
-      dispatch(getUser());
+      await dispatch(getUser());
     };
     if (name.length === 0) {
       fetchUser();
     }
   }, []);
-
+  console.log("matchs", matchs.length);
   useEffect(() => {
-    fetchFan(name, setFan)
-    fetchReservedSeats(reservedMatchID, setReservedSeat)
-    fetchMatchs(setmatchs);
-    fetchTeams(setTeams)
-    fetchStadiums(setstadiums)
-    fetchReferees(setreferees)
-  }, []);
+    if (name.length !== 0) {
+      console.log("hii", name);
+      fetchFan(name, setFan);
+      fetchReservedSeats(reservedMatchID, setReservedSeat);
+      fetchMatchs(setmatchs);
+    }
+  }, [name, reservedMatchID]);
 
   // for the matches
 
@@ -135,15 +141,15 @@ function FanHome() {
       Lineman1: LineMan1,
       Limeman2: LineMan2,
     };
-    const res = await add_editMatch(match, add);
-    if (res.status === 200) {
-      setisEditable(false);
-      setshowenMatch(false);
-      fetchMatchs(setmatchs);
-      setadd(false);
-    } else {
-      seterror("something went wrong");
-    }
+    // const res = await add_editMatch(match, add);
+    // if (res.status === 200) {
+    //   // setisEditable(false);
+    //   // setshowenMatch(false);
+    //   // fetchMatchs(setmatchs);
+    //   // setadd(false);
+    // } else {
+    //   seterror("something went wrong");
+    // }
   };
 
   const handleSaveReservation = async (e) => {
@@ -152,26 +158,26 @@ function FanHome() {
       date: new Date(),
       seatNumber: reservedSeat,
       userid: fan.id,
-      matchid: reservedMatchID
+      matchid: reservedMatchID,
     };
-    const res = await addReservation(reservation)
+    const res = await addReservation(reservation);
     if (res.status === 200) {
-      
     } else {
       seterror("something went wrong");
     }
   };
 
   const saveState = (match) => {
+    console.log(match.Stadium.name);
     setholdID(match.id);
-    changeTeam1(match.team1);
-    changeTeam2(match.team2);
-    changeMatchVenue(match.MatchVenue);
-    changeDate(match.Date);
-    changeTime(match.Time);
-    changeMainReferee(match.MainReferee);
-    changeLineMan1(match.Lineman1);
-    changeLineMan2(match.Limeman2);
+    changeTeam1(match.team1.name);
+    changeTeam2(match.team2.name);
+    changeMatchVenue(match.Stadium.name);
+    changeDate(match.date || "2022-12-22");
+    changeTime(match.time || "20:00");
+    changeMainReferee(match.ref1.name);
+    changeLineMan1(match.ref2.name);
+    changeLineMan2(match.ref3.name);
   };
 
   const handleView = (match) => {
@@ -184,9 +190,9 @@ function FanHome() {
 
   const handleReserve = (match) => {
     setShowGrid(true);
-    setReservedMatchID(match.id)
-    setRowsNum(match.Stadium.rows)
-    setColsNum(match.Stadium.seatsPerRow)
+    setReservedMatchID(match.id);
+    setRowsNum(match.Stadium.rows);
+    setColsNum(match.Stadium.seatsPerRow);
   };
 
   const handleReserveSeat = () => {
@@ -218,18 +224,19 @@ function FanHome() {
       <nav className="navbar sticky-top navbar-black bg-black">
         <div className="container-fluid">
           <a className="navbar-brand" style={{ color: "white" }}>
-            Home {name}
+            Home {name ? name : ""}
           </a>
           <a className="navbar-brand" style={{ color: "white" }}>
             FIFA WORLD CUP 22
           </a>
-          {fanprofile()}
+          {/* {fanprofile()} */}
+          <FanProfile />
         </div>
       </nav>
       <h1 className="mt-2 pt-5 text-center fw-bold"> Matches</h1>
       <div className="row mx-0 p-5 pt-3">
         <div className="col-12 col-md-12">
-          {matchs.length ? (
+          {matchs.length !== 0 ? (
             <>
               <table className="table">
                 <thead className="table-dark">
@@ -247,9 +254,9 @@ function FanHome() {
                   {matchs.map((match, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td> {match.team1} </td>
-                      <td> {match.Time} </td>
-                      <td> {match.team2}</td>
+                      <td> {match.team1.name} </td>
+                      <td> {match.time || "8:00 PM"} </td>
+                      <td> {match.team2.name}</td>
                       <td>
                         <button
                           className="btn btn-myedit btn-link text-decoration-none text-view"
@@ -468,10 +475,10 @@ function FanHome() {
                       {Array.from(Array(colsNum)).map((_j, index_j) => (
                         <Col>
                           <button
-                            className= "btn block btn-secondary stadBtn"
+                            className="btn block btn-secondary stadBtn"
                             id={index_j + colsNum * index_i + 1}
                             onClick={() => {
-                              setReservedSeat(index_j + colsNum * index_i + 1)
+                              setReservedSeat(index_j + colsNum * index_i + 1);
                               // setOpenPay(true);
                               // disableArray.push(index_j+cols_num*index_i+1)
                               // console.log(disableArray)
@@ -526,8 +533,8 @@ function FanHome() {
                               type="submit"
                               className="btn btn-warning"
                               onClick={() => {
-                                handleSaveReservation()
-                                setOpenPay(false)
+                                handleSaveReservation();
+                                setOpenPay(false);
                               }}
                             >
                               Submit

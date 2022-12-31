@@ -5,8 +5,10 @@ import { login } from "./Helpers/auth";
 
 function Login() {
   const [success, setSuccess] = useState(false);
+  const [user_role, setRole] = useState(false);
   const [error, seterror] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const {
     value: name,
     error: errorName,
@@ -27,18 +29,26 @@ function Login() {
       password,
     };
     const res = await login(LoginData);
-    if (res.data) {
+    console.log(res);
+    if (res.status === true) {
       setSuccess(true);
+      setRole(res.data.role);
     } else {
-      seterror(res);
+      console.log(res);
+      seterror(res.error.data.error);
     }
     setLoading(false);
   };
 
   if (success) {
-    return <Redirect to="/admin" />;
+    if (user_role === "Admin") {
+      return <Redirect to="/admin/dashboard" />;
+    } else if (user_role === "Manager") {
+      return <Redirect to="/manager/dashboard" />;
+    } else {
+      return <Redirect to="/fan" />;
+    }
   }
-
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -54,7 +64,9 @@ function Login() {
         <h2 className="text-center mb-3">Login</h2>
         {(errorName || errorPassword || error) && (
           <div className="alert alert-danger p-2 mb-3" role="alert">
-            {errorName
+            {error
+              ? error
+              : errorName
               ? "Make sure you entered the username correct"
               : "Make sure you entered the password correct"}
           </div>

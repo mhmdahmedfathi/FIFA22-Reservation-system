@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import useCurrentState from "../hooks/useCurrentState";
-import { getUser } from '../StateManagment/Auth/actions';
+import { getUser } from "../StateManagment/Auth/actions";
 import { fetchFan, editFan } from "./Helpers/fan";
 // import { Typography } from '@mui/material';
 import Button from "@mui/material/Button";
@@ -19,26 +19,29 @@ import "./fan.css";
 import Nav from "react-bootstrap/Nav";
 import { logout } from "./Helpers/auth";
 
-export default function ResponsiveDialog() {
-  const [fan, setFan] = useState([]);
+export default function FanProfile() {
+  const [fan, setFan] = useState([""]);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const name = useSelector((state) => state.auth.username);
+  const name = useSelector((state) => state.auth.username) || "";
+  console.log("hi", name);
   const dispatch = useDispatch();
   useEffect(() => {
-      const fetchUser = async () => {
-          dispatch(getUser());
-      };
-      if (name.length === 0) {
-          fetchUser();
-      }
+    const fetchUser = async () => {
+      await dispatch(getUser());
+    };
+    if (name.length === 0) {
+      fetchUser();
+    }
   }, []);
 
   useEffect(() => {
-    fetchFan(name, setFan)
+    if (name.length !== 0) {
+      fetchFan(name, setFan);
+    }
   }, [name]);
 
   const {
@@ -95,7 +98,7 @@ export default function ResponsiveDialog() {
     error: errorPassword,
     handleChange: changePassword,
     handleEvent: handlePassword,
-  } = useCurrentState((value) => {} );
+  } = useCurrentState((value) => {});
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -108,18 +111,18 @@ export default function ResponsiveDialog() {
       gender: Gender,
       nationality: Nationality,
       role: Role,
-      password: Password
+      password: Password,
     };
     const res = await editFan(fan);
     if (res.status === 200) {
-        setEdit(false);
-        fetchFan(name, setFan);
+      setEdit(false);
+      fetchFan(name, setFan);
     } else {
-        // seterror("something went wrong");
+      // seterror("something went wrong");
     }
-}
+  };
 
-const saveState = (fan) => {
+  const saveState = (fan) => {
     changeFirstName(fan.firstname);
     changeLastName(fan.lastname);
     changeBirthDate(fan.birthdate);
@@ -127,7 +130,7 @@ const saveState = (fan) => {
     changeNationality(fan.nationality);
     changeRole(fan.role);
     changePassword(fan.password);
-}
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -140,12 +143,12 @@ const saveState = (fan) => {
 
   const handleClickProfile = () => {
     setEdit(false);
-    saveState(fan)
+    saveState(fan);
   };
 
   const handleEdit = () => {
     setEdit(true);
-    saveState(fan)
+    saveState(fan);
   };
 
   const logOut = () => {
@@ -195,7 +198,7 @@ const saveState = (fan) => {
                     autoComplete="off"
                     autoFocus
                     disabled={true}
-                    value={name}
+                    value={name ? name : ""}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -223,7 +226,9 @@ const saveState = (fan) => {
                     autoComplete="off"
                     autoFocus
                     disabled={!edit}
-                    value={edit? FirstName: fan.firstname}
+                    value={
+                      edit ? FirstName : fan.firstname ? fan.firstname : ""
+                    }
                     onChange={handleFirstName}
                   />
                 </div>
