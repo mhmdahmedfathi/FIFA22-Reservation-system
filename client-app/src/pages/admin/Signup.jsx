@@ -9,6 +9,7 @@ function AdminSignup() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const [BackendError, setBackendError] = useState();
 
   const {
     value: name,
@@ -62,7 +63,9 @@ function AdminSignup() {
     if (errorName) {
       setError("Make sure you entered the username correct");
     } else if (errorPassword) {
-      setError("Make sure you entered the password correct");
+      setError(
+        "Make sure you entered the password correct and at least 8 chars ",
+      );
     } else if (errorfirstName) {
       setError("Make sure you entered the firstname correct");
     } else if (errorlastname) {
@@ -77,6 +80,8 @@ function AdminSignup() {
       setError("Make sure you entered the nationality correct");
     } else if (errorEmail) {
       setError("Make sure you entered the email correct");
+    } else if (BackendError) {
+      setError(BackendError);
     } else {
       setError(null);
     }
@@ -90,6 +95,7 @@ function AdminSignup() {
     errorNationality,
     errorEmail,
     gender,
+    BackendError,
   ]);
 
   const handleSubmit = async (e) => {
@@ -117,16 +123,17 @@ function AdminSignup() {
       role: "Admin",
     };
     const res = await signup(signupData);
-    if (!res.error) {
+    if (res.status === true) {
       setSuccess(true);
     } else {
       console.log(res.error);
+      setBackendError(res.error.data.error);
     }
     setLoading(false);
   };
 
   if (success) {
-    return <Redirect to="/admin/login" />;
+    return <Redirect to="/login" />;
   }
 
   return (
@@ -280,7 +287,11 @@ function AdminSignup() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {gender === 1 ? "Male" : "Female"}
+              {gender.length === 0
+                ? "Please enter valid gender"
+                : gender === 1
+                ? "Male"
+                : "Female"}
             </a>
 
             <ul className="dropdown-menu">

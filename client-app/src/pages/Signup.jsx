@@ -9,6 +9,7 @@ function Signup() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const [BackendError, setBackendError] = useState();
 
   const {
     value: name,
@@ -90,6 +91,8 @@ function Signup() {
       setError("Make sure you entered the nationality correct");
     } else if (errorEmail) {
       setError("Make sure you entered the email correct");
+    } else if (BackendError) {
+      setError(BackendError);
     } else {
       setError(null);
     }
@@ -103,6 +106,7 @@ function Signup() {
     errorNationality,
     errorEmail,
     gender,
+    BackendError,
   ]);
 
   const handleSubmit = async (e) => {
@@ -135,10 +139,23 @@ function Signup() {
       role,
     };
     const res = await signup(signupData);
-    if (!res.error) {
+    if (res.status === true) {
       setSuccess(true);
     } else {
       console.log(res.error);
+      let log_error = "";
+      for (var key in res.error.data.errors) {
+        console.log(key);
+        if (res.error.data.errors.hasOwnProperty(key)) {
+          log_error +=
+            res.error.data.errors[key].value +
+            " =>  " +
+            res.error.data.errors[key].msg +
+            "\n";
+        }
+      }
+      console.log(log_error);
+      setBackendError(log_error);
     }
     setLoading(false);
   };
@@ -161,7 +178,7 @@ function Signup() {
         onSubmit={handleSubmit}
         className="p-4 bg-dark text-light rounded-4"
       >
-        <h2 className="text-center mb-3">Admin Signup</h2>
+        <h2 className="text-center mb-3">Signup</h2>
         {error && (
           <div className="alert alert-danger p-2 mb-3" role="alert">
             {error}
@@ -298,8 +315,8 @@ function Signup() {
               aria-expanded="false"
             >
               {gender.length === 0
-                ? "Please choose Gender"
-                : 1
+                ? "Please enter valid gender"
+                : gender === 1
                 ? "Male"
                 : "Female"}
             </a>
