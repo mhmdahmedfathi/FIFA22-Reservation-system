@@ -168,15 +168,16 @@ function FanHome() {
   };
 
   const saveState = (match) => {
+    console.log(match.Stadium.name);
     setholdID(match.id);
-    changeTeam1(match.team1);
-    changeTeam2(match.team2);
-    changeMatchVenue(match.MatchVenue);
-    changeDate(match.Date);
-    changeTime(match.Time);
-    changeMainReferee(match.MainReferee);
-    changeLineMan1(match.Lineman1);
-    changeLineMan2(match.Limeman2);
+    changeTeam1(match.team1.name);
+    changeTeam2(match.team2.name);
+    changeMatchVenue(match.Stadium.name);
+    changeDate(match.date || "2022-12-22");
+    changeTime(match.time || "20:00");
+    changeMainReferee(match.ref1.name);
+    changeLineMan1(match.ref2.name);
+    changeLineMan2(match.ref3.name);
   };
 
   const handleView = (match) => {
