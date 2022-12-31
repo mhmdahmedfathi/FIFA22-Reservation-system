@@ -49,7 +49,7 @@ router.post("/",
         return res.status(400).json({ error: "Set is already reserved" });
       }
       reservation.create({
-        date: Date.now().toString(),
+        date: new Date(Date.now()).toLocaleString().split(',')[0].toString(),
         setNumber: req.body.seatNumber,
         MatchId: req.body.matchId,
         UserId: req.user.id
