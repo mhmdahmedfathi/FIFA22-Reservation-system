@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import useCurrentState from "../../hooks/useCurrentState";
-import useInput from "../../hooks/useInput";
-import { signup } from "../Helpers/auth";
-import "./admin.css";
+import useCurrentState from "./../hooks/useCurrentState";
+import useInput from "./../hooks/useInput";
+import { signup } from "./Helpers/auth";
+import "./admin/admin.css";
 
-function AdminSignup() {
+function Signup() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -58,15 +58,28 @@ function AdminSignup() {
     handleChange: changeEmail,
   } = useInput((value) => !value.includes("@"));
 
+  const {
+    value: role,
+    error: errorRole,
+    handleChange: changeRole,
+    handleEvent: handleRole,
+  } = useCurrentState((value) => value !== "Manager" && value !== "Fan");
+
   useEffect(() => {
     if (errorName) {
       setError("Make sure you entered the username correct");
     } else if (errorPassword) {
-      setError("Make sure you entered the password correct");
+      setError(
+        "Make sure you entered the password correct and it must be at least 8 characters",
+      );
     } else if (errorfirstName) {
-      setError("Make sure you entered the firstname correct");
+      setError(
+        "Make sure you entered the firstname correct and it must be at least 3 characters",
+      );
     } else if (errorlastname) {
-      setError("Make sure you entered the lastname correct");
+      setError(
+        "Make sure you entered the lastname correct and it must be at least 3 characters",
+      );
     } else if (errorDate) {
       setError("Make sure you entered the date correct");
     } else if (errorGender) {
@@ -102,6 +115,11 @@ function AdminSignup() {
         'Make sure you entered Gender correct \n it must be "Male" or "Female"',
       );
       return;
+    } else if (role === "") {
+      setError(
+        'Make sure you entered Role correct \n it must be "Manager" or "Fan"',
+      );
+      return;
     }
 
     setLoading(true);
@@ -114,7 +132,7 @@ function AdminSignup() {
       gender,
       nationality,
       email,
-      role: "Admin",
+      role,
     };
     const res = await signup(signupData);
     if (!res.error) {
@@ -128,7 +146,6 @@ function AdminSignup() {
   if (success) {
     return <Redirect to="/admin/login" />;
   }
-
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -280,7 +297,11 @@ function AdminSignup() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {gender === 1 ? "Male" : "Female"}
+              {gender.length === 0
+                ? "Please choose Gender"
+                : 1
+                ? "Male"
+                : "Female"}
             </a>
 
             <ul className="dropdown-menu">
@@ -311,6 +332,57 @@ function AdminSignup() {
             </ul>
           </div>
         </div>
+        <div
+          className="mb-3"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+          }}
+        >
+          <label htmlFor="role" className="form-label">
+            role
+          </label>
+          <div className="dropdown" id="role">
+            <a
+              style={{ margin: "auto" }}
+              className="btn btn-secondary dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {role.length === 0 ? "Please choose role" : role}
+            </a>
+
+            <ul className="dropdown-menu">
+              <li>
+                <a
+                  className="dropdown-item"
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    changeRole("Manager");
+                  }}
+                >
+                  Manager
+                </a>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    changeRole("Fan");
+                  }}
+                >
+                  Fan
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
         <button
           type="submit"
           className="btn btn-primary d-block mx-auto"
@@ -323,4 +395,4 @@ function AdminSignup() {
   );
 }
 
-export default AdminSignup;
+export default Signup;
