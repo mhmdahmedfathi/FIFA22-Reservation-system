@@ -45,9 +45,9 @@ export default function FanProfile() {
     }
   }, [name]);
 
-  console.log('whyyy', fan) //taba3 tmam
-  console.log('please', fan.username) //taba3 tmam
-  console.log('please', fan.email) //taba3 tmam
+  console.log("whyyy", fan); //taba3 tmam
+  console.log("please", fan.username); //taba3 tmam
+  console.log("please", fan.email); //taba3 tmam
 
   const {
     value: email,
@@ -107,8 +107,8 @@ export default function FanProfile() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    console.log("?", fan.email)
-    console.log("??", name)
+    console.log("?", fan.email);
+    console.log("??", name);
     let fanObj = {
       username: name,
       email: fan.email,
@@ -124,10 +124,9 @@ export default function FanProfile() {
     if (res.status === 200) {
       setEdit(false);
       fetchFan(name, setFan);
-      
     } else {
       seterror("something went wrong in updating profile");
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -183,12 +182,22 @@ export default function FanProfile() {
         <DialogContent>
           <Nav variant="tabs" defaultActiveKey="#profileForm">
             <Nav.Item>
-              <Nav.Link onClick={()=>{handleClickProfile(fan)}} href="#profileForm">
+              <Nav.Link
+                onClick={() => {
+                  handleClickProfile(fan);
+                }}
+                href="#profileForm"
+              >
                 Profile
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link onClick={()=>{handleEdit(fan)}} eventKey="link-1">
+              <Nav.Link
+                onClick={() => {
+                  handleEdit(fan);
+                }}
+                eventKey="link-1"
+              >
                 Edit Profile
               </Nav.Link>
             </Nav.Item>
@@ -208,7 +217,7 @@ export default function FanProfile() {
                     autoFocus
                     disabled={true}
                     // value={name ? name : ""}
-                    value = {fan.username}
+                    value={fan.username}
                   />
                 </div>
                 <div className="col-12 col-md-6 form-group mb-3">
@@ -272,6 +281,76 @@ export default function FanProfile() {
                     onChange={handleBirthDate}
                   />
                 </div>
+                {/* <div className="col-12 col-md-6 form-group mb-3">
+                  <label htmlFor="title">Gender</label>
+                  <div style={{ display: "flex" }}>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="gender"
+                      id="gender"
+                      placeholder="Gender"
+                      autoComplete="off"
+                      autoFocus
+                      disabled={!edit}
+                      value={edit ? Gender : fan.gender}
+                      onChange={handleGender}
+                      style={{
+                        borderBottomRightRadius: "0px",
+                        borderTopRightRadius: "0px",
+                      }}
+                    />
+                    <div className="dropdown" id="title">
+                      <a
+                        style={{ margin: "auto" }}
+                        className="btn btn-secondary dropdown-toggle"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <faList />
+                        {Gender.length === 0
+                          ? "Please enter valid gender"
+                          : Gender === 1
+                          ? "Male"
+                          : "Female"}
+                      </a>
+
+                      <ul
+                        className="dropdown-menu"
+                        style={{
+                          borderBottomLeftRadius: "0px",
+                          borderTopLeftRadius: "0px",
+                        }}
+                      >
+                        <li>
+                          <a
+                            className="dropdown-item"
+                            href=""
+                            onClick={(e) => {
+                              e.preventDefault();
+                              changeGender(1);
+                            }}
+                          >
+                            Male
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            className="dropdown-item"
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              changeGender(0);
+                            }}
+                          >
+                            Female
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div> */}
                 <div className="col-12 col-md-6 form-group mb-3">
                   <label htmlFor="title">Gender</label>
                   <input
@@ -334,7 +413,11 @@ export default function FanProfile() {
                 </div>
               </div>
               {/* {edit && <button className="btn btn-warning">Submit</button>} */}
-              <button className="btn btn-warning" onClick={handleSave} disabled={!edit}>
+              <button
+                className="btn btn-warning"
+                onClick={handleSave}
+                disabled={!edit}
+              >
                 Submit
               </button>
               <button
