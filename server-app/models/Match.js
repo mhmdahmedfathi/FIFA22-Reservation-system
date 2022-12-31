@@ -19,21 +19,26 @@ const Match = db.define('Match', {
   }
 });
 
-Match.hasOne(Team, {
-  foreignKey: "team1_id"
+Match.belongsTo(Team, {
+  foreignKey: "team1_id",
+  as: "team1"
 }); // foreign key added to the Match table
-Match.hasOne(Team,{
-  foreignKey: "team2_id"
+Match.belongsTo(Team,{
+  foreignKey: "team2_id",
+  as: "team2"
 }); // foreign key added to the Match table
-Match.hasOne(Stadium); // foreign key added to the Match table
-Match.hasOne(Referee,{
-  foreignKey: "ref1_id"
+Match.belongsTo(Stadium); // foreign key added to the Match table
+Match.belongsTo(Referee,{
+  foreignKey: "ref1_id",
+  as : "ref1"
 }); // foreign key added to the Match table
-Match.hasOne(Referee,{
-  foreignKey: "ref2_id"
+Match.belongsTo(Referee,{
+  foreignKey: "ref2_id",
+  as: "ref2"
 }); // foreign key added to the Match table
-Match.hasOne(Referee,{
-  foreignKey: "ref3_id"
+Match.belongsTo(Referee,{
+  foreignKey: "ref3_id",
+  as: "ref3"
 }); // foreign key added to the Match table
 
 

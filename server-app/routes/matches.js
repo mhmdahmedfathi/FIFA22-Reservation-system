@@ -3,10 +3,22 @@ const { body, validationResult } = require('express-validator');
 const match = require("../models/Match");
 const { authorize }= require("../middleWare/authorize");
 const Roles = require("../helpers/roles.js");
-
+const Team = require("../models/Team");
+const Referee = require("../models/Referee");
+const Stadium = require("../models/Stadium");
 // the only restriction is a team can not have two matches at the same day)
 router.get("/", (req, res) => {
-  match.findAll().then((match) => {
+  match.findAll({
+    attributes : ['id','date','isFull','time'],
+    include:[{model: Team,as: "team1",attributes: ['name']},
+    { model: Team, as: "team2", attributes: ['name']},
+    { model: Referee, as: "ref1", attributes: ['name']},
+    { model: Referee, as: "ref2", attributes: ['name']},
+    { model: Referee, as: "ref3", attributes: ['name']},
+    { model: Stadium, attributes: ['name'] }
+  ]
+
+  }).then((match) => {
     res.json(match);
   }).catch((err) => {
     res.status(500).json({ error: err });
@@ -17,7 +29,16 @@ router.get("/:matchid", (req, res) => {
   match.findOne({
     where: {
       id: req.params.matchid
-    }
+    },
+    attributes : ['id','date','isFull','time'],
+    include:[{model: Team,as: "team1",attributes: ['name']},
+    { model: Team, as: "team2", attributes: ['name']},
+    { model: Referee, as: "ref1", attributes: ['name']},
+    { model: Referee, as: "ref2", attributes: ['name']},
+    { model: Referee, as: "ref3", attributes: ['name']},
+    { model: Stadium, attributes: ['name'] }
+  ]
+    
   }).then((match) => {
     if (!match) {
       return res.status(404).json({ error: "Match not found" });
@@ -42,6 +63,7 @@ router.post("/create",authorize([Roles.Manager]), (req, res) => {
     ref2_id: req.body.referee2,
     ref3_id: req.body.referee3,
     StadiumId: req.body.stadium_id,
+    time: req.body.time
   }).then((match) => {
     res.json(match);
   }).catch((err) => {

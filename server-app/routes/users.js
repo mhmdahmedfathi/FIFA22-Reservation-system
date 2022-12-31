@@ -31,7 +31,7 @@ router.post("/approve/:id", authorize([Roles.Admin]), (req, res) => {
       return res.status(400).json({ error: "User is not a Manager it is already approved" });
     }
     user.update({
-      isAprove: true
+      isApproved: true
     }).then((user) => {
       res.json(user);
     }
