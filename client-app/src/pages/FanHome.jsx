@@ -249,14 +249,17 @@ function FanHome() {
                       <td> {match.time || "8:00 PM"} </td>
                       <td> {match.team2.name}</td>
                       <td>
-                        <button
-                          className="btn btn-myedit btn-link text-decoration-none text-view"
-                          onClick={() => {
-                            handleView(match);
-                          }}
-                        >
-                          view <FontAwesomeIcon className="ms-2" icon={faEye} />
-                        </button>
+                        <a href="#viewMatch">
+                          <button
+                            className="btn btn-myedit btn-link text-decoration-none text-view"
+                            onClick={() => {
+                              handleView(match);
+                            }}
+                          >
+                            view{" "}
+                            <FontAwesomeIcon className="ms-2" icon={faEye} />
+                          </button>
+                        </a>
                       </td>
                       <td>
                         <a href="#TicketReserve">
@@ -293,12 +296,12 @@ function FanHome() {
             <h2 className="text-center">There are no matchs</h2>
           )}
         </div>
-        <div className="col-12 col-md-12">
+        <div id="viewMatch" className="col-12 col-md-12">
           {showenMatch && (
             <>
               <h1 className="mt-2 pt-5 text-center fw-bold">
                 {" "}
-                Match {add ? "add" : !isEditable ? "view" : "reserve"}
+                Match {!isEditable ? "view" : "reserve"}
               </h1>
               {error && (
                 <div className="alert alert-danger p-2 mb-1" role="alert">

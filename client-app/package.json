@@ -38,7 +38,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.js src/**/*.jsx",
-    "prettier": "prettier --config .prettierrc src/pages/FanHome.jsx src/pages/FanProfile.jsx --write"
+    "prettier": "prettier --config .prettierrc src/pages/FanHome.jsx src/pages/FanProfile.jsx src/pages/MgmtDashboard.jsx --write"
   },
   "eslintConfig": {
     "extends": [

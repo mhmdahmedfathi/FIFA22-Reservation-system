@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
-import { faEye, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEdit, faFutbol } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   addStadium,
@@ -11,11 +11,16 @@ import {
   fetchStadiums,
   fetchReferees,
 } from "./Helpers/Mgmt";
+import { fetchReservedSeats } from "./Helpers/fan";
 import useCurrentState from "../hooks/useCurrentState";
 import { logout } from "./Helpers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../StateManagment/Auth/actions";
 import "./mgmt.css";
+import "./fan.css";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 function MgmtDashboard() {
   const [matchs, setmatchs] = useState([]);
@@ -30,6 +35,11 @@ function MgmtDashboard() {
   const [stadiums, setstadiums] = useState([]);
   const [referees, setreferees] = useState([]);
   const [isFull, setIsFull] = useState(false);
+  const [reservedSeats, setReservedSeats] = useState([]);
+  const [reservedMatchID, setReservedMatchID] = useState(1);
+  const [rowsNum, setRowsNum] = useState(0);
+  const [colsNum, setColsNum] = useState(0);
+  const [showGrid, setShowGrid] = useState(false);
 
   useEffect(() => {
     fetchMatchs(setmatchs);
@@ -302,10 +312,34 @@ function MgmtDashboard() {
     }
   }, []);
 
+  useEffect(() => {
+    if (name.length !== 0) {
+      fetchReservedSeats(reservedMatchID, setReservedSeats);
+    }
+  }, [name, reservedMatchID]);
+
   const log_out = () => {
     logout();
     window.location.href = "/";
   };
+
+  const handleReserve = (match) => {
+    setShowGrid(true);
+    setReservedMatchID(match.id);
+    setRowsNum(match.Stadium.rows);
+    setColsNum(match.Stadium.seatsPerRow);
+  };
+
+  let isSubmitted = [];
+
+  fetchReservedSeats(reservedMatchID, setReservedSeats);
+  for (let i = 0; i < rowsNum * colsNum; i++) {
+    isSubmitted.push(0);
+  }
+
+  for (let i = 0; i < reservedSeats.length; i++) {
+    isSubmitted[reservedSeats[i]] = 1;
+  }
 
   return (
     <div>
@@ -343,6 +377,7 @@ function MgmtDashboard() {
                     <th>Second team</th>
                     <th>view</th>
                     <th>edit</th>
+                    <th>view seats</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -372,6 +407,19 @@ function MgmtDashboard() {
                           Edit{" "}
                           <FontAwesomeIcon className="ms-2" icon={faEdit} />
                         </button>
+                      </td>
+                      <td>
+                        <a href="#TicketReserve">
+                          <button
+                            className="btn btn-myedit btn-link text-decoration-none text-success"
+                            onClick={() => {
+                              handleReserve(match);
+                            }}
+                          >
+                            view seats{" "}
+                            <FontAwesomeIcon className="ms-2" icon={faFutbol} />
+                          </button>
+                        </a>
                       </td>
                     </tr>
                   ))}
@@ -883,6 +931,42 @@ function MgmtDashboard() {
                   Cancel
                 </button>
               </form>
+            </>
+          )}
+        </div>
+        <div className="col-12 col-md-12">
+          {showGrid && (
+            <>
+              <h1 className="mt-2 pt-5 text-center fw-bold">
+                {" "}
+                Match Stadium Grid
+              </h1>
+              {error && (
+                <div className="alert alert-danger p-2 mb-1" role="alert">
+                  {error}
+                </div>
+              )}
+              <div id="TicketReserve">
+                <Container>
+                  {Array.from(Array(rowsNum)).map((_i, index_i) => (
+                    <Row className="stadRow">
+                      {Array.from(Array(colsNum)).map((_j, index_j) => (
+                        <Col>
+                          <button
+                            className="btn block btn-secondary stadBtn"
+                            onClick={(e) => {}}
+                            disabled={
+                              isSubmitted[index_j + colsNum * index_i + 1]
+                            }
+                          >
+                            {index_j + colsNum * index_i + 1}
+                          </button>
+                        </Col>
+                      ))}
+                    </Row>
+                  ))}
+                </Container>
+              </div>
             </>
           )}
         </div>
