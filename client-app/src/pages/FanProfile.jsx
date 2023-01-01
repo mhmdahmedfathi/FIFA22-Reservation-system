@@ -293,7 +293,7 @@ export default function FanProfile() {
                       autoComplete="off"
                       autoFocus
                       disabled={!edit}
-                      value={edit ? Gender : fan.gender}
+                      value={edit ? (Gender===0?"Female":"Male"): fan.gender?"Female":"Male"}
                       onChange={handleGender}
                       style={{
                         borderBottomRightRadius: "0px",
@@ -310,7 +310,7 @@ export default function FanProfile() {
                       >
                         <faList />
                         {Gender.length === 0
-                          ? "Please enter valid gender"
+                          ? "enter valid gender"
                           : Gender === 1
                           ? "Male"
                           : "Female"}
