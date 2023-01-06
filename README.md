@@ -1,5 +1,5 @@
 # FIFA 22 Reservation System
-### (will add screenshots asap)
+### (will add screenshots)
 
 ## Running the Client Side
 1. To run the project locally on your pc:
