@@ -1,6 +1,6 @@
 # FIFA 22 Reservation System
 
-# Running the Client Side
+## Running the Client Side
 1. To run the project locally on your pc:
     ```
     git clone https://github.com/mhmdahmedfathi/Reservation_system.git
@@ -13,7 +13,7 @@
     npm install
     ```
 
-4. You can start the server using
+4. You can start the project using
 
    ``` 
    npm run start
